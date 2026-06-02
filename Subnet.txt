@@ -1,4 +1,7 @@
 
+vless://5113274e-071d-490b-91c3-f160e7e7e7a5@sni.avaaal.ir:2083?alpn=http%2F1.1&encryption=none&fp=random&host=ssss2.avaaal.ir&path=%2F720f09dba195249b423f771661162528%2Fworkers%2Fservices%2Fview%2FAvaal%2Fproduction%2Fsettings&security=tls&sni=ssss2.avaaal.ir&type=ws#SV2-kjhgg_3567783-120.00MB%F0%9F%93%8A-1H%E2%8F%B3
+
+
 vless://ca6d9308-b3a2-4f1b-b43c-185a59a55f71@104.17.121.71:443?path=%2Fsg-melbi&security=tls&encryption=none&insecure=0&host=support.zoom.us.cyylr.eu.cc&type=ws&allowInsecure=0&sni=support.zoom.us.cyylr.eu.cc#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2022%20%7C%20Kho-12%7C%20MTSRVRS
 vless://1ed1436c-a3fd-449d-9f08-801f8b4d98ba@104.17.121.71:443?path=%2Fsg-orcl&security=tls&encryption=none&insecure=0&host=support.zoom.us.cyylr.eu.cc&type=ws&allowInsecure=0&sni=support.zoom.us.cyylr.eu.cc#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2013%20%7C%20Kho-12%7C%20MTSRVRS
 vless://a9cd18d2-dbf3-462b-9380-920a08fbc16b@104.17.121.71:443?path=%2Fsg-do&security=tls&encryption=none&insecure=0&host=support.zoom.us.cyylr.eu.cc&type=ws&allowInsecure=0&sni=support.zoom.us.cyylr.eu.cc#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2028%20%7C%20Kho-12%7C%20MTSRVRS
