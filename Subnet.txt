@@ -1,4 +1,4 @@
-vless://a1c3fc39-dc0a-4186-872c-b59e37edab6f@nl.zedcdn.ir:1010?mode=auto&path=%2F&security=&encryption=none&extra=%7B%22xPaddingBytes%22%3A%22100-1000%22%7D&host=hostname&type=xhttp#%F0%9F%87%B9%F0%9F%87%B7%20Turkey
+vless://9604ca1e-d11e-4452-828e-6a5e783af195@nl.zedcdn.ir:1010?security=none&type=xhttp&headerType=&path=%2F&host=hostname&mode=auto&extra=%7B%22xPaddingBytes%22%3A%22100-1000%22%7D#%F0%9F%87%B9%F0%9F%87%B7%20Turkey
 
 vless://85165c4a-0482-4a93-b10d-5519752fb803@2.27.105.10:9563?mode=packet-up&path=%2Fapi%2Fv2%2Fcontent&security=reality&encryption=none&extra=%7B%22xPaddingBytes%22%3A%22100-1000%22%7D&pbk=RiWZSrHQjhBJ0ZAkZFF3OmL-A0HkM2SrzyWqohUR0m4&fp=chrome&spx=%2F5cl95c7RJ9yaST3&type=xhttp&sni=www.varzesh3.com&sid=96ee29e6c11fe9#moojgg_5790814-250.00MB%F0%9F%93%8A-0M%E2%8F%B3
 
