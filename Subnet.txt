@@ -1,11 +1,3 @@
-vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@8.47.69.0:443?encryption=none&security=tls&sni=shegeftihaaa.net&fp=firefox&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#367.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
+vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@104.16.72.101:443?encryption=none&security=tls&sni=shegeftihaaa.net&fp=chrome&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#488.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.181:8080?#425.%20%F0%9F%87%B3%F0%9F%87%B1%20The%20Netherlands
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.203:8080?#304.%20%F0%9F%87%B3%F0%9F%87%B1%20The%20Netherlands
-vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@www.speedtest.org:443?encryption=none&security=tls&sni=shegeftihaaa.net&fp=chrome&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#423.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
-vless://e277ac9b-3225-3381-a9fb-3585419f7142@love.ns.cloudflare.com:443?encryption=none&security=tls&sni=media14.ftmsoft.com&fp=chrome&alpn=http%2F1.1&insecure=0&allowInsecure=0&type=ws&host=media14.ftmsoft.com&path=%2Fmedia14#258.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
-trojan://S.ibYdZshHTF-ne.M%2B.Fznp_-hyFFnCSix@149.104.104.58:443?security=tls&insecure=0&allowInsecure=0&type=tcp&headerType=none#347.%20%F0%9F%87%B5%F0%9F%87%B0%20Pakistan
-vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@104.26.14.137:443?encryption=none&security=tls&sni=shegeftihaaa.net&fp=chrome&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#238.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
-vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@8.47.69.0:443?encryption=none&security=tls&sni=shegeftihaaa.net&fp=chrome&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#253.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
 vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@104.16.72.101:443?encryption=none&security=tls&sni=shegeftihaaa.net&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#268.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.204:8080?#305.%20%F0%9F%87%B3%F0%9F%87%B1%20The%20Netherlands
-vless://7e544a9d-7667-413b-bbb0-b3bb1aac6d77@172.64.32.75:443?encryption=none&security=tls&sni=shegeftihaaa.net&insecure=0&allowInsecure=0&type=ws&host=shegeftihaaa.net&path=%2Frsedgws#378.%20%F0%9F%87%A9%F0%9F%87%AA%20Germany
