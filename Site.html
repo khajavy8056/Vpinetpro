@@ -4,26 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ویترین متحرک و دسته‌بندی‌های ووکامرس</title>
+    <title>ویترین متحرک و دسته‌بندی‌های لوکس - تم روشن</title>
     <!-- آیکون‌های فونت‌آسام و فونت وزیر -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
 
     <style>
         /* =========================================
-           استایل‌های ایزوله برای المنتور / وردپرس
+           پالت رنگی سازمانی لوکس (تم روشن و بژ)
            ========================================= */
         .nexus-widget-wrapper {
-            --cream-bg: #F7F4EF;
-            --card-dark-gradient: linear-gradient(145deg, #1C1B20 0%, #111015 100%);
-            --accent-purple: #8B5CF6;
-            --accent-purple-glow: rgba(139, 92, 246, 0.25);
-            --gold-accent: #D4AF37;
-            --text-dark: #2B2927;
-            --border-color: rgba(212, 175, 55, 0.15);
+            --cream: #F7F3EE;
+            --cream-soft: #EFE7DD;
+            --beige: #CDB293;
+            --beige-dark: #B89772;
+            --silver: #D7D7D7;
+            --dark: #2B2927;
+            --card-light-bg: linear-gradient(135deg, #FFFFFF 0%, #FAF6F0 100%);
+            --card-border: rgba(205, 178, 147, 0.4);
+            --shadow-soft: 0 10px 25px rgba(43, 41, 39, 0.06);
             
             font-family: 'Vazirmatn', Tahoma, sans-serif;
-            background-color: var(--cream-bg);
+            background-color: var(--cream);
             padding: 30px 10px;
             direction: rtl;
             width: 100%;
@@ -56,7 +58,7 @@
         .nexus-section-title {
             font-size: 22px;
             font-weight: 900;
-            color: var(--text-dark);
+            color: var(--dark);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -66,12 +68,12 @@
             content: '';
             width: 5px;
             height: 22px;
-            background: var(--accent-purple);
+            background: var(--beige);
             border-radius: 4px;
             display: inline-block;
         }
 
-        /* شبکه دسته‌بندی‌ها (۸ تایی: ۴ بالا، ۴ پایین) */
+        /* شبکه دسته‌بندی‌ها (۸ تایی: ۴ بالا، ۴ پایین) - تم روشن و خلاقانه */
         .nexus-nav-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -79,8 +81,8 @@
         }
 
         .nexus-category-card {
-            background: var(--card-dark-gradient);
-            border-radius: 20px;
+            background: var(--card-light-bg);
+            border-radius: 22px;
             padding: 18px 20px;
             height: 135px;
             display: flex;
@@ -89,16 +91,17 @@
             text-decoration: none;
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-soft);
             transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
         }
 
         .nexus-category-card:hover {
             transform: translateY(-6px);
-            border-color: var(--accent-purple);
-            box-shadow: 0 16px 32px var(--accent-purple-glow);
+            border-color: var(--beige);
+            box-shadow: 0 18px 35px rgba(205, 178, 147, 0.25);
+            background: #FFFFFF;
         }
 
         .nexus-card-info {
@@ -110,20 +113,27 @@
         }
 
         .nexus-card-info h4 {
-            color: #FFFFFF;
+            color: var(--dark);
             font-size: 17px;
             font-weight: 800;
             line-height: 1.3;
         }
 
         .nexus-card-info span {
-            color: var(--gold-accent);
+            color: var(--beige-dark);
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 4px;
-            opacity: 0.9;
+            gap: 6px;
+        }
+
+        /* استایل آیکون‌های رنگی و جذاب */
+        .nexus-card-info span i {
+            font-size: 14px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nexus-card-img-wrapper {
@@ -140,7 +150,7 @@
             max-width: 115%;
             max-height: 115%;
             object-fit: contain;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 10px 15px rgba(43, 41, 39, 0.15));
             transition: transform 0.4s ease;
         }
 
@@ -150,11 +160,11 @@
 
         .nexus-card-glow {
             position: absolute;
-            right: -20px;
-            bottom: -20px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
+            right: -25px;
+            bottom: -25px;
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle, rgba(205, 178, 147, 0.25) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -170,8 +180,8 @@
             background: #FFFFFF;
             border-radius: 22px;
             padding: 20px 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 6px 20px rgba(43, 41, 39, 0.05);
+            border: 1px solid var(--cream-soft);
             overflow: hidden;
             scroll-margin-top: 20px;
         }
@@ -181,14 +191,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px dashed #E7E5E4;
+            border-bottom: 1px dashed var(--silver);
             margin-bottom: 16px;
         }
 
         .nexus-belt-header h3 {
             font-size: 17px;
             font-weight: 800;
-            color: var(--text-dark);
+            color: var(--dark);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -196,8 +206,8 @@
 
         .nexus-belt-header a {
             font-size: 12px;
-            color: var(--accent-purple);
-            font-weight: 700;
+            color: var(--beige-dark);
+            font-weight: 800;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -206,7 +216,7 @@
         }
 
         .nexus-belt-header a:hover {
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .nexus-belt-track-container {
@@ -244,15 +254,15 @@
         /* کارت محصول داخل نوار متحرک */
         .nexus-product-card {
             width: 210px;
-            background: var(--cream-bg);
+            background: var(--cream);
             border-radius: 16px;
             padding: 14px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             text-decoration: none;
-            color: var(--text-dark);
-            border: 1px solid #E5E0D8;
+            color: var(--dark);
+            border: 1px solid var(--cream-soft);
             transition: all 0.3s ease;
             flex-shrink: 0;
             cursor: pointer;
@@ -261,8 +271,8 @@
         .nexus-product-card:hover {
             transform: translateY(-4px);
             background: #FFFFFF;
-            border-color: var(--accent-purple);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-color: var(--beige);
+            box-shadow: 0 10px 20px rgba(43, 41, 39, 0.08);
         }
 
         .nexus-product-thumb {
@@ -291,7 +301,7 @@
         .nexus-product-title {
             font-size: 13px;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--dark);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -307,15 +317,15 @@
         .nexus-product-price {
             font-size: 13px;
             font-weight: 900;
-            color: #059669;
+            color: var(--dark);
         }
 
         .nexus-add-btn {
             width: 32px;
             height: 32px;
             border-radius: 8px;
-            background: #1C1B20;
-            color: #fff;
+            background: var(--dark);
+            color: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -324,7 +334,8 @@
         }
 
         .nexus-product-card:hover .nexus-add-btn {
-            background: var(--accent-purple);
+            background: var(--beige);
+            color: var(--dark);
         }
 
         /* رسپانسیو */
@@ -351,13 +362,13 @@
     <div class="nexus-widget-wrapper">
         <div class="nexus-container">
             
-            <!-- بخش ۱: شبکه‌ای از دسته‌بندی‌ها (۸ تایی: ۴ بالا، ۴ پایین) -->
+            <!-- بخش ۱: شبکه‌ای از دسته‌بندی‌ها (۸ تایی روشن و لوکس) -->
             <section>
                 <div class="nexus-section-header">
                     <h2 class="nexus-section-title">دسته‌بندی محصولات</h2>
                 </div>
                 <div class="nexus-nav-grid" id="nexus-categories-grid">
-                    <!-- توسط JS ساختاربندی می‌شود -->
+                    <!-- توسط JS بارگذاری می‌شود -->
                 </div>
             </section>
 
@@ -377,32 +388,19 @@
     <script>
         /* =========================================================================
            ⚙️ بخش تنظیمات اختصاصی وردپرس و ووکامرس (WOOCOMMERCE CONFIG)
-           =========================================================================
-           محمد جان، تمام مقادیری که می‌خواهی به ووکامرس وصل کنی همینجا قرار دارن.
-           
-           پارامترهای هر دسته‌بندی:
-           - wcCatId: شناسه عددی (ID) دسته‌بندی در ووکامرس (مثلا: 15)
-           - wcSlug: نامک دسته‌بندی در ووکامرس (مثلا: 'iphone')
-           - catUrl: لینک کامل یا نسبی برگه دسته‌بندی در سایت (مثلا: '/product-category/iphone/')
-           - title: عنوان نمایش داده شده در کارت
-           - subTitle: زیرعنوان یا توضیح کوتاه
-           - image: عکس وکتور/تصویر دسته‌بندی
            ========================================================================= */
 
         const NEXUS_WOO_CONFIG = {
-            // آیا درخواست اتوماتیک به API ووکامرس ارسال شود؟ (روی true قرار دهید)
             fetchFromWooCommerce: true,
-
-            // آدرس پایه وب‌سایت (به طور خودکار دامنه‌ای که کد روی آن اجرا می‌شود را می‌گیرد)
             baseUrl: window.location.origin,
 
-            // تنظیمات کامل ۸ دسته‌بندی اصلی سایت شما:
+            // تنظیمات ۸ دسته‌بندی (آیپد و لپ‌تاپ ویندوز جابه‌جا شدند + تم روشن)
             categories: [
                 {
                     id: 'cat-1',
-                    wcCatId: 15, // 👈 آیدی دسته‌بندی ووکامرس
-                    wcSlug: 'iphone', // 👈 نامک (Slug) دسته‌بندی
-                    catUrl: '/product-category/iphone/', // 👈 لینک برگه دسته‌بندی جهت باز شدن کامل
+                    wcCatId: 15,
+                    wcSlug: 'iphone',
+                    catUrl: '/product-category/iphone/',
                     title: 'آیفون‌ها',
                     subTitle: 'سری ۱۶ و ۱۵ پرو',
                     image: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png',
@@ -429,17 +427,7 @@
                     icon: 'fa-solid fa-laptop'
                 },
                 {
-                    id: 'cat-4',
-                    wcCatId: 30,
-                    wcSlug: 'windows-laptop',
-                    catUrl: '/product-category/laptops/',
-                    title: 'لپ‌تاپ ویندوز',
-                    subTitle: 'طراحی و گیمینگ',
-                    image: 'https://pngimg.com/uploads/laptop/laptop_PNG5654.png',
-                    icon: 'fa-brands fa-windows'
-                },
-                {
-                    id: 'cat-5',
+                    id: 'cat-4', // آیپد
                     wcCatId: 35,
                     wcSlug: 'ipad',
                     catUrl: '/product-category/ipad/',
@@ -447,6 +435,16 @@
                     subTitle: 'پرو و ایر M2',
                     image: 'https://pngimg.com/uploads/ipad/ipad_PNG10212.png',
                     icon: 'fa-solid fa-tablet-screen-button'
+                },
+                {
+                    id: 'cat-5', // لپ‌تاپ ویندوز
+                    wcCatId: 30,
+                    wcSlug: 'windows-laptop',
+                    catUrl: '/product-category/laptops/',
+                    title: 'لپ‌تاپ ویندوز',
+                    subTitle: 'طراحی و گیمینگ',
+                    image: 'https://pngimg.com/uploads/laptop/laptop_PNG5654.png',
+                    icon: 'fa-brands fa-windows'
                 },
                 {
                     id: 'cat-6',
@@ -481,22 +479,15 @@
             ]
         };
 
-        // داده‌های فال‌بک لوکس (زمانی که سایت قطعه یا محصولی در آن دسته ثبت نشده)
         const FALLBACK_DEMO_DATA = {
             'cat-1': [
-                { name: 'آیفون ۱۵ پرو مکس ۱ ترابایت', price: '۸۴,۵۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png' },
-                { name: 'آیفون ۱۵ پرو ۲۵۶ گیگابایت', price: '۶۹,۸۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png' }
-            ],
-            'cat-2': [
-                { name: 'سامسونگ گلکسی S24 اولترا', price: '۶۸,۰۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/samsung_galaxy/samsung_galaxy_PNG11.png' },
-                { name: 'شیائومی ۱۴ پرو ۵۱۲ گیگ', price: '۵۴,۲۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/samsung_galaxy/samsung_galaxy_PNG11.png' }
+                { name: 'آیفون ۱۵ پرو مکس', price: '۸۴,۵۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png' }
             ],
             'default': [
-                { name: 'محصول ویژه‌ لوکس دیجیتال', price: 'تماس بگیرید', permalink: '#', img: 'https://via.placeholder.com/200?text=Nexus+Gear' }
+                { name: 'محصول ویژه‌', price: 'تماس بگیرید', permalink: '#', img: 'https://via.placeholder.com/200?text=Nexus+Gear' }
             ]
         };
 
-        // تابع اسکرول نرم به نوار مربوطه
         function scrollToBelt(id) {
             const el = document.getElementById(id);
             if (el) {
@@ -504,23 +495,16 @@
             }
         }
 
-        // تابع اصلی دریافت محصولات از WooCommerce Store API
         async function fetchWooProducts(category) {
             if (!NEXUS_WOO_CONFIG.fetchFromWooCommerce) {
                 return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
             }
-
             try {
-                // استفاده از REST API استاندارد و عمومی ووکامرس (Store API بدون نیاز به کلیدSecret)
                 const apiUrl = `${NEXUS_WOO_CONFIG.baseUrl}/wp-json/wc/store/v1/products?category=${category.wcCatId}&per_page=8`;
                 const response = await fetch(apiUrl);
-                
-                if (!response.ok) {
-                    throw new Error('فراخوانی API ووکامرس ناموفق بود');
-                }
-
+                if (!response.ok) throw new Error('فراخوانی API ووکامرس ناموفق بود');
                 const data = await response.json();
-
+                
                 if (Array.isArray(data) && data.length > 0) {
                     return data.map(item => {
                         let formattedPrice = 'تماس بگیرید';
@@ -528,30 +512,17 @@
                             const rawPrice = parseInt(item.prices.price) / Math.pow(10, item.prices.currency_minor_unit || 0);
                             formattedPrice = rawPrice.toLocaleString('fa-IR') + ' ' + (item.prices.currency_symbol || 'تومان');
                         }
-
-                        const imageSrc = (item.images && item.images.length > 0) 
-                            ? item.images[0].src 
-                            : category.image;
-
-                        return {
-                            name: item.name,
-                            price: formattedPrice,
-                            permalink: item.permalink || '#', // 👈 لینک مستقیم محصول واقعی در ووکامرس
-                            img: imageSrc
-                        };
+                        const imageSrc = (item.images && item.images.length > 0) ? item.images[0].src : category.image;
+                        return { name: item.name, price: formattedPrice, permalink: item.permalink || '#', img: imageSrc };
                     });
                 } else {
-                    // اگر در ووکامرس محصولی ثبت نشده بود، داده پیش‌فرض می‌آید
                     return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
                 }
-
             } catch (error) {
-                console.warn(`[Nexus Widget] خطا در بارگذاری محصولات دسته ${category.title}، استفاده از داده پیش‌فرض:`, error);
                 return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
             }
         }
 
-        // اجرای ساختار ویجت پس از لود صفحه
         document.addEventListener('DOMContentLoaded', async () => {
             const gridContainer = document.getElementById('nexus-categories-grid');
             const beltsContainer = document.getElementById('nexus-belts-wrapper');
@@ -559,7 +530,7 @@
             for (let index = 0; index < NEXUS_WOO_CONFIG.categories.length; index++) {
                 const cat = NEXUS_WOO_CONFIG.categories[index];
 
-                // ۱. رندر کارت دسته‌بندی بالای صفحه
+                // ۱. رندر کارت‌های دسته‌بندی با تم روشن و جذاب
                 const card = document.createElement('div');
                 card.className = 'nexus-category-card';
                 card.onclick = () => scrollToBelt(`belt-${cat.id}`);
@@ -575,18 +546,13 @@
                 `;
                 gridContainer.appendChild(card);
 
-                // ۲. رندر بخش نوار متحرک برای این دسته‌بندی
+                // ۲. رندر بخش نوارهای متحرک
                 const beltSection = document.createElement('div');
                 beltSection.className = 'nexus-belt-section';
                 beltSection.id = `belt-${cat.id}`;
-
-                // جهت حرکت متناوب (یکی راست‌به‌چپ، یکی چپ‌به‌راست)
                 const directionClass = (index % 2 === 0) ? 'nexus-move-rtl' : 'nexus-move-ltr';
-
-                // دریافت محصولات واقعی از ووکامرس یا فال‌بک
                 const products = await fetchWooProducts(cat);
 
-                // تکرار کارت‌ها برای ایجاد حرکت بی‌نهایت (Infinite Loop)
                 let productsHTML = '';
                 const repeatCount = Math.max(3, Math.ceil(12 / products.length));
                 
@@ -607,10 +573,9 @@
                     });
                 }
 
-                // دکمه «مشاهده همه» لینک مستقیم به برگه دسته‌بندی ووکامرس دارد
                 beltSection.innerHTML = `
                     <div class="nexus-belt-header">
-                        <h3><i class="${cat.icon}" style="color: var(--accent-purple);"></i> محصولات دسته ${cat.title}</h3>
+                        <h3><i class="${cat.icon}" style="color: var(--beige-dark);"></i> محصولات دسته ${cat.title}</h3>
                         <a href="${cat.catUrl}" target="_self">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
                     </div>
                     <div class="nexus-belt-track-container">
