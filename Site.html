@@ -39,7 +39,6 @@
         gap: 40px;
     }
 
-    /* عنوان بخش‌ها */
     .nexus-section-header {
         display: flex;
         align-items: center;
@@ -66,7 +65,6 @@
         display: inline-block;
     }
 
-    /* شبکه دسته‌بندی‌ها (۸ تایی: ۴ بالا، ۴ پایین) - تم روشن و خلاقانه */
     .nexus-nav-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -121,7 +119,6 @@
         gap: 6px;
     }
 
-    /* استایل آیکون‌های رنگی و جذاب */
     .nexus-card-info span i {
         font-size: 14px;
         background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
@@ -162,7 +159,6 @@
         pointer-events: none;
     }
 
-    /* نوارهای متحرک ۸ تایی (Moving Belts) */
     .nexus-belts-wrapper {
         display: flex;
         flex-direction: column;
@@ -226,7 +222,6 @@
         will-change: transform;
     }
 
-    /* انیمیشن‌های حرکت متناوب */
     .nexus-move-rtl { animation: nexusMarqueeRTL 36s linear infinite; }
     .nexus-move-ltr { animation: nexusMarqueeLTR 36s linear infinite; }
 
@@ -244,7 +239,6 @@
         100% { transform: translateX(0); }
     }
 
-    /* کارت محصول داخل نوار متحرک */
     .nexus-product-card {
         width: 210px;
         background: var(--cream);
@@ -331,7 +325,6 @@
         color: var(--dark);
     }
 
-    /* رسپانسیو */
     @media (max-width: 1024px) {
         .nexus-nav-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .nexus-category-card { height: 120px; padding: 12px; }
@@ -352,127 +345,39 @@
 
 <div class="nexus-widget-wrapper">
     <div class="nexus-container">
-        
-        <!-- بخش ۱: شبکه‌ای از دسته‌بندی‌ها (۸ تایی روشن و لوکس) -->
         <section>
             <div class="nexus-section-header">
                 <h2 class="nexus-section-title">دسته‌بندی محصولات</h2>
             </div>
-            <div class="nexus-nav-grid" id="nexus-categories-grid">
-                <!-- توسط JS بارگذاری می‌شود -->
-            </div>
+            <div class="nexus-nav-grid" id="nexus-categories-grid"></div>
         </section>
 
-        <!-- بخش ۲: نوارهای متحرک ۸ تایی (Moving Belts) -->
         <section>
             <div class="nexus-section-header">
                 <h2 class="nexus-section-title">ویترین متحرک محصولات</h2>
             </div>
-            <div class="nexus-belts-wrapper" id="nexus-belts-wrapper">
-                <!-- توسط JS بارگذاری می‌شود -->
-            </div>
+            <div class="nexus-belts-wrapper" id="nexus-belts-wrapper"></div>
         </section>
-
     </div>
 </div>
 
 <script>
-    /* =========================================================================
-       ⚙️ بخش تنظیمات اختصاصی وردپرس و ووکامرس (WOOCOMMERCE CONFIG)
-       ========================================================================= */
-
     const NEXUS_WOO_CONFIG = {
-        fetchFromWooCommerce: true, // اگه false باشه کلا دمو نشون میده
+        fetchFromWooCommerce: true, // اگر true باشد و متصل باشد دیتا می‌کشد، وگرنه دمو می‌ماند
         baseUrl: window.location.origin,
 
-        // تنظیمات ۸ دسته‌بندی اصلی
         categories: [
-            {
-                id: 'cat-1',
-                wcCatId: 15,
-                wcSlug: 'iphone',
-                catUrl: '/product-category/iphone/',
-                title: 'آیفون‌ها',
-                subTitle: 'سری ۱۶ و ۱۵ پرو',
-                image: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png',
-                icon: 'fa-brands fa-apple'
-            },
-            {
-                id: 'cat-2',
-                wcCatId: 20,
-                wcSlug: 'android',
-                catUrl: '/product-category/android/',
-                title: 'اندروید',
-                subTitle: 'سامسونگ و شیائومی',
-                image: 'https://pngimg.com/uploads/samsung_galaxy/samsung_galaxy_PNG11.png',
-                icon: 'fa-brands fa-android'
-            },
-            {
-                id: 'cat-3',
-                wcCatId: 25,
-                wcSlug: 'macbook',
-                catUrl: '/product-category/macbook/',
-                title: 'مک‌بوک',
-                subTitle: 'تراشه‌های M3 و M2',
-                image: 'https://pngimg.com/uploads/macbook/macbook_PNG8.png',
-                icon: 'fa-solid fa-laptop'
-            },
-            {
-                id: 'cat-4',
-                wcCatId: 35,
-                wcSlug: 'ipad',
-                catUrl: '/product-category/ipad/',
-                title: 'آیپدها',
-                subTitle: 'پرو و ایر M2',
-                image: 'https://pngimg.com/uploads/ipad/ipad_PNG10212.png',
-                icon: 'fa-solid fa-tablet-screen-button'
-            },
-            {
-                id: 'cat-5',
-                wcCatId: 30,
-                wcSlug: 'windows-laptop',
-                catUrl: '/product-category/laptops/',
-                title: 'لپ‌تاپ ویندوز',
-                subTitle: 'طراحی و گیمینگ',
-                image: 'https://pngimg.com/uploads/laptop/laptop_PNG5654.png',
-                icon: 'fa-brands fa-windows'
-            },
-            {
-                id: 'cat-6',
-                wcCatId: 40,
-                wcSlug: 'android-tablet',
-                catUrl: '/product-category/tablets/',
-                title: 'تبلت اندروید',
-                subTitle: 'سری گلکسی تب',
-                image: 'https://pngimg.com/uploads/tablet/tablet_PNG8588.png',
-                icon: 'fa-solid fa-tablet'
-            },
-            {
-                id: 'cat-7',
-                wcCatId: 45,
-                wcSlug: 'consoles',
-                catUrl: '/product-category/consoles/',
-                title: 'کنسول بازی',
-                subTitle: 'PS5 و ایکس‌باکس',
-                image: 'https://pngimg.com/uploads/gamepad/gamepad_PNG122.png',
-                icon: 'fa-solid fa-gamepad'
-            },
-            {
-                id: 'cat-8',
-                wcCatId: 50,
-                wcSlug: 'gadgets',
-                catUrl: '/product-category/gadgets/',
-                title: 'گجت‌ها',
-                subTitle: 'اپل واچ و ایرپاد',
-                image: 'https://pngimg.com/uploads/apple_watch/apple_watch_PNG23.png',
-                icon: 'fa-solid fa-headphones'
-            }
+            { id: 'cat-1', wcCatId: 15, wcSlug: 'iphone', catUrl: '/product-category/iphone/', title: 'آیفون‌ها', subTitle: 'سری ۱۶ و ۱۵ پرو', image: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png', icon: 'fa-brands fa-apple' },
+            { id: 'cat-2', wcCatId: 20, wcSlug: 'android', catUrl: '/product-category/android/', title: 'اندروید', subTitle: 'سامسونگ و شیائومی', image: 'https://pngimg.com/uploads/samsung_galaxy/samsung_galaxy_PNG11.png', icon: 'fa-brands fa-android' },
+            { id: 'cat-3', wcCatId: 25, wcSlug: 'macbook', catUrl: '/product-category/macbook/', title: 'مک‌بوک', subTitle: 'تراشه‌های M3 و M2', image: 'https://pngimg.com/uploads/macbook/macbook_PNG8.png', icon: 'fa-solid fa-laptop' },
+            { id: 'cat-4', wcCatId: 35, wcSlug: 'ipad', catUrl: '/product-category/ipad/', title: 'آیپدها', subTitle: 'پرو و ایر M2', image: 'https://pngimg.com/uploads/ipad/ipad_PNG10212.png', icon: 'fa-solid fa-tablet-screen-button' },
+            { id: 'cat-5', wcCatId: 30, wcSlug: 'windows-laptop', catUrl: '/product-category/laptops/', title: 'لپ‌تاپ ویندوز', subTitle: 'طراحی و گیمینگ', image: 'https://pngimg.com/uploads/laptop/laptop_PNG5654.png', icon: 'fa-brands fa-windows' },
+            { id: 'cat-6', wcCatId: 40, wcSlug: 'android-tablet', catUrl: '/product-category/tablets/', title: 'تبلت اندروید', subTitle: 'سری گلکسی تب', image: 'https://pngimg.com/uploads/tablet/tablet_PNG8588.png', icon: 'fa-solid fa-tablet' },
+            { id: 'cat-7', wcCatId: 45, wcSlug: 'consoles', catUrl: '/product-category/consoles/', title: 'کنسول بازی', subTitle: 'PS5 و ایکس‌باکس', image: 'https://pngimg.com/uploads/gamepad/gamepad_PNG122.png', icon: 'fa-solid fa-gamepad' },
+            { id: 'cat-8', wcCatId: 50, wcSlug: 'gadgets', catUrl: '/product-category/gadgets/', title: 'گجت‌ها', subTitle: 'اپل واچ و ایرپاد', image: 'https://pngimg.com/uploads/apple_watch/apple_watch_PNG23.png', icon: 'fa-solid fa-headphones' }
         ]
     };
 
-    /* =========================================================================
-       📦 دیتای فال‌بک (دمو) برای تمام ۸ دسته در صورت عدم اتصال یا خالی بودن دسته
-       ========================================================================= */
     const FALLBACK_DEMO_DATA = {
         'cat-1': [
             { name: 'آیفون ۱۵ پرو مکس ۲۵۶ گیگ', price: '۸۴,۵۰۰,۰۰۰ تومان', permalink: '#', img: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png' },
@@ -514,56 +419,43 @@
 
     function scrollToBelt(id) {
         const el = document.getElementById(id);
-        if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    async function fetchWooProducts(category) {
-        if (!NEXUS_WOO_CONFIG.fetchFromWooCommerce) {
-            return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
+    function generateProductsHTML(products, cat) {
+        let html = '';
+        const repeatCount = Math.max(3, Math.ceil(12 / products.length));
+        for (let r = 0; r < repeatCount; r++) {
+            products.forEach(p => {
+                html += `
+                    <a href="${p.permalink}" class="nexus-product-card" target="_self">
+                        <div class="nexus-product-thumb">
+                            <img src="${p.img}" alt="${p.name}" onerror="this.onerror=null; this.src='${cat.image}';">
+                        </div>
+                        <div class="nexus-product-title">${p.name}</div>
+                        <div class="nexus-product-footer">
+                            <div class="nexus-product-price">${p.price}</div>
+                            <div class="nexus-add-btn"><i class="fa-solid fa-arrow-left"></i></div>
+                        </div>
+                    </a>
+                `;
+            });
         }
-        try {
-            const apiUrl = `${NEXUS_WOO_CONFIG.baseUrl}/wp-json/wc/store/v1/products?category=${category.wcCatId}&per_page=8`;
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error('فراخوانی API ناموفق بود');
-            const data = await response.json();
-            
-            if (Array.isArray(data) && data.length > 0) {
-                return data.map(item => {
-                    let formattedPrice = 'تماس بگیرید';
-                    if (item.prices && item.prices.price) {
-                        const rawPrice = parseInt(item.prices.price) / Math.pow(10, item.prices.currency_minor_unit || 0);
-                        formattedPrice = rawPrice.toLocaleString('fa-IR') + ' ' + (item.prices.currency_symbol || 'تومان');
-                    }
-                    const imageSrc = (item.images && item.images.length > 0) ? item.images[0].src : category.image;
-                    return { name: item.name, price: formattedPrice, permalink: item.permalink || '#', img: imageSrc };
-                });
-            } else {
-                return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
-            }
-        } catch (error) {
-            return FALLBACK_DEMO_DATA[category.id] || FALLBACK_DEMO_DATA['default'];
-        }
+        return html;
     }
 
-    async function initNexusWidget() {
+    // ساخت سریع و آنی الگوی صفحه بدون انتظار برای شبکه
+    function buildInitialUI() {
         const gridContainer = document.getElementById('nexus-categories-grid');
         const beltsContainer = document.getElementById('nexus-belts-wrapper');
 
         if (!gridContainer || !beltsContainer) return;
-        
-        // جلوگیری از دوباره رندر شدن تکراری
-        if (gridContainer.getAttribute('data-rendered') === 'true') return;
-        gridContainer.setAttribute('data-rendered', 'true');
 
         gridContainer.innerHTML = '';
         beltsContainer.innerHTML = '';
 
-        for (let index = 0; index < NEXUS_WOO_CONFIG.categories.length; index++) {
-            const cat = NEXUS_WOO_CONFIG.categories[index];
-
-            // ۱. رندر کارت‌های دسته‌بندی
+        NEXUS_WOO_CONFIG.categories.forEach((cat, index) => {
+            // ۱. رندر شبکه دسته‌بندی
             const card = document.createElement('div');
             card.className = 'nexus-category-card';
             card.onclick = () => scrollToBelt(`belt-${cat.id}`);
@@ -579,32 +471,13 @@
             `;
             gridContainer.appendChild(card);
 
-            // ۲. رندر بخش نوارهای متحرک
+            // ۲. رندر اولیه نوار متحرک با دیتای فال‌بک
             const beltSection = document.createElement('div');
             beltSection.className = 'nexus-belt-section';
             beltSection.id = `belt-${cat.id}`;
             const directionClass = (index % 2 === 0) ? 'nexus-move-rtl' : 'nexus-move-ltr';
-            const products = await fetchWooProducts(cat);
-
-            let productsHTML = '';
-            const repeatCount = Math.max(3, Math.ceil(12 / products.length));
-            
-            for (let r = 0; r < repeatCount; r++) {
-                products.forEach(p => {
-                    productsHTML += `
-                        <a href="${p.permalink}" class="nexus-product-card" target="_self">
-                            <div class="nexus-product-thumb">
-                                <img src="${p.img}" alt="${p.name}" onerror="this.onerror=null; this.src='${cat.image}';">
-                            </div>
-                            <div class="nexus-product-title">${p.name}</div>
-                            <div class="nexus-product-footer">
-                                <div class="nexus-product-price">${p.price}</div>
-                                <div class="nexus-add-btn"><i class="fa-solid fa-arrow-left"></i></div>
-                            </div>
-                        </a>
-                    `;
-                });
-            }
+            const demoProducts = FALLBACK_DEMO_DATA[cat.id] || FALLBACK_DEMO_DATA['default'];
+            const initialHTML = generateProductsHTML(demoProducts, cat);
 
             beltSection.innerHTML = `
                 <div class="nexus-belt-header">
@@ -612,20 +485,53 @@
                     <a href="${cat.catUrl}" target="_self">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
                 </div>
                 <div class="nexus-belt-track-container">
-                    <div class="nexus-belt-track ${directionClass}">
-                        ${productsHTML}
+                    <div class="nexus-belt-track ${directionClass}" id="track-${cat.id}">
+                        ${initialHTML}
                     </div>
                 </div>
             `;
-
             beltsContainer.appendChild(beltSection);
+
+            // ۳. فراخوانی محصولات ووکامرس در پس‌زمینه (بدون بلاک کردن UI)
+            if (NEXUS_WOO_CONFIG.fetchFromWooCommerce) {
+                fetchAndHydrateWooData(cat);
+            }
+        });
+    }
+
+    // دریافت دیتا از ووکامرس در پس‌زمینه و به‌روزرسانی نوار مربوطه
+    async function fetchAndHydrateWooData(cat) {
+        try {
+            const apiUrl = `${NEXUS_WOO_CONFIG.baseUrl}/wp-json/wc/store/v1/products?category=${cat.wcCatId}&per_page=8`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) return;
+            const data = await response.json();
+            
+            if (Array.isArray(data) && data.length > 0) {
+                const wooProducts = data.map(item => {
+                    let formattedPrice = 'تماس بگیرید';
+                    if (item.prices && item.prices.price) {
+                        const rawPrice = parseInt(item.prices.price) / Math.pow(10, item.prices.currency_minor_unit || 0);
+                        formattedPrice = rawPrice.toLocaleString('fa-IR') + ' ' + (item.prices.currency_symbol || 'تومان');
+                    }
+                    const imageSrc = (item.images && item.images.length > 0) ? item.images[0].src : cat.image;
+                    return { name: item.name, price: formattedPrice, permalink: item.permalink || '#', img: imageSrc };
+                });
+
+                const trackEl = document.getElementById(`track-${cat.id}`);
+                if (trackEl) {
+                    trackEl.innerHTML = generateProductsHTML(wooProducts, cat);
+                }
+            }
+        } catch (e) {
+            // در صورت بروز هرگونه خطای شبکه، همان ویترین دمو باقی می‌ماند
         }
     }
 
-    // اجرا هم برای حالت عادی و هم برای ویرایشگر المنتور
+    // اجرای بلافاصله بدون معطلی
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initNexusWidget);
+        document.addEventListener('DOMContentLoaded', buildInitialUI);
     } else {
-        initNexusWidget();
+        buildInitialUI();
     }
 </script>
