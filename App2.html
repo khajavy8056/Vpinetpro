@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معماری پردازش دیتای کوانت | Jimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap');
+        body { font-family: 'Vazirmatn', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .glass-panel { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+        
+        .tab-btn { transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .tab-active { background-color: #2563eb; color: white; border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .tab-inactive { background-color: rgba(30, 41, 59, 0.5); color: #94a3b8; border-color: #475569; }
+        .tab-inactive:hover { background-color: rgba(51, 65, 85, 0.8); color: #cbd5e1; }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
+
+    <div class="glass-panel w-full max-w-6xl rounded-2xl p-5 sm:p-8">
+        
+        <!-- هدر و انتخابگر معماری (تب‌ها) -->
+        <div class="text-center mb-6 pb-6 border-b border-slate-700">
+            <h1 class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-blue-400 to-emerald-400 mb-4">سیستم جامع پردازش دیتابیس (V3.0)</h1>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 sm:space-x-reverse mb-4">
+                <button id="tabMode1" onclick="switchMode(1)" class="tab-btn tab-inactive px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+                    معماری رابطه‌ای (از پلاک / تا پلاک)
+                </button>
+                <button id="tabMode2" onclick="switchMode(2)" class="tab-btn tab-active px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                    معماری مستقل ستونی (تشخیص خط‌تیره)
+                </button>
+            </div>
+            
+            <div class="bg-slate-900/50 p-4 rounded-lg inline-block border border-slate-700">
+                <p id="modeDescription" class="text-emerald-400 text-sm font-medium">
+                    در این معماری، هر ستون به صورت ۱۰۰٪ مجزا پردازش می‌شود. اگر سلولی فرمت `عدد-عدد` داشته باشد، بازگشایی شده و به صورت نامتقارن به پایین ستون اضافه می‌گردد.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- پنل کنترل (چپ) -->
+            <div class="lg:col-span-1 space-y-4">
+                <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700 shadow-inner">
+                    <label class="block text-sm font-bold text-slate-300 mb-3">۱. آپلود دیتابیس (Excel / CSV)</label>
+                    <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-300 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer bg-slate-900 border border-slate-600 p-2 transition-all">
+                </div>
+
+                <button id="startBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-4 rounded-xl transition-all disabled:opacity-50 flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(37,99,235,0.4)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    استارت موتور پردازش
+                </button>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center shadow-inner">
+                        <span class="text-slate-400 block mb-1">حداکثر سطر اولیه</span>
+                        <span id="statOriginal" class="font-bold text-white text-xl">0</span>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center shadow-inner">
+                        <span class="text-slate-400 block mb-1">حداکثر سطر نهایی</span>
+                        <span id="statNew" class="font-bold text-emerald-400 text-xl">0</span>
+                    </div>
+                </div>
+
+                <button id="downloadBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 px-4 rounded-xl transition-all hidden justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    دانلود دیتابیس نهایی (CSV)
+                </button>
+            </div>
+
+            <!-- پنل مانیتورینگ (راست) -->
+            <div class="lg:col-span-3 space-y-4 flex flex-col">
+                <!-- نوار پیشرفت -->
+                <div class="bg-slate-800/60 p-5 rounded-xl border border-slate-700 shadow-inner">
+                    <div class="flex justify-between text-sm font-bold mb-3">
+                        <span id="statusText" class="text-blue-400">سیستم منتظر دیتای ورودی است...</span>
+                        <span id="progressPercent" class="text-white">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 rounded-full h-4 border border-slate-600 overflow-hidden relative">
+                        <div id="progressBar" class="bg-gradient-to-l from-blue-500 to-emerald-400 h-4 rounded-full transition-all ease-out duration-300" style="width: 0%"></div>
+                        <!-- افکت نوری روی نوار -->
+                        <div class="absolute top-0 left-0 bottom-0 right-0 bg-white/20 w-full h-full transform -skew-x-12 translate-x-full transition-transform" id="progressGlow"></div>
+                    </div>
+                </div>
+
+                <!-- جدول رندر خروجی -->
+                <div class="bg-slate-800/60 p-2 rounded-xl border border-slate-700 flex-grow flex flex-col min-h-[350px] shadow-inner">
+                    <div class="p-3 border-b border-slate-700 flex justify-between items-center text-sm">
+                        <h3 class="font-bold text-emerald-400 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" /></svg>
+                            مانیتورینگ معماری (۱۰ سطر اول ماتریس)
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto overflow-y-auto max-h-[350px] p-2 custom-scrollbar">
+                        <table class="w-full text-sm text-right text-slate-300 whitespace-nowrap">
+                            <thead class="text-slate-400 uppercase bg-slate-900/80 sticky top-0 z-10" id="tableHead">
+                                <tr><th class="px-4 py-3 border-b border-slate-700">دیتا پس از رندر در اینجا نمایش داده می‌شود...</th></tr>
+                            </thead>
+                            <tbody id="tableBody" class="divide-y divide-slate-700/40"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // === متغیرهای استراتژیک ===
+        let currentMode = 2; // پیش‌فرض روی حالت معماری مستقل (Mode 2)
+        let finalProcessedData = [];
+        let originalFileName = "";
+
+        // === المان‌های DOM ===
+        const tab1 = document.getElementById('tabMode1');
+        const tab2 = document.getElementById('tabMode2');
+        const modeDesc = document.getElementById('modeDescription');
+        const fileInput = document.getElementById('fileInput');
+        const startBtn = document.getElementById('startBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+        const statusText = document.getElementById('statusText');
+        const statOriginal = document.getElementById('statOriginal');
+        const statNew = document.getElementById('statNew');
+        const tableHead = document.getElementById('tableHead');
+        const tableBody = document.getElementById('tableBody');
+
+        // === مدیریت تب‌ها ===
+        function switchMode(mode) {
+            currentMode = mode;
+            if (mode === 1) {
+                tab1.className = "tab-btn tab-active px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2";
+                tab2.className = "tab-btn tab-inactive px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2";
+                modeDesc.innerText = "در این حالت، سیستم ارتباط افقی بین داده‌ها را حفظ کرده و به دنبال ستون‌های «از پلاک» و «تا پلاک» می‌گردد.";
+            } else {
+                tab2.className = "tab-btn tab-active px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2";
+                tab1.className = "tab-btn tab-inactive px-6 py-3 rounded-lg border text-sm font-bold flex items-center justify-center gap-2";
+                modeDesc.innerText = "در این معماری، هر ستون به صورت ۱۰۰٪ مجزا پردازش می‌شود. بازه‌های خط‌تیره‌دار بازگشایی شده و به صورت نامتقارن به پایین ستون اضافه می‌گردند.";
+            }
+            resetUIForStart(false);
+        }
+
+        // === استارت اصلی ===
+        startBtn.addEventListener('click', () => {
+            const file = fileInput.files[0];
+            if (!file) { alert("رفیق، بدون آپلود دیتابیس که نمیشه بک‌تست گرفت! فایل رو انتخاب کن."); return; }
+
+            originalFileName = file.name.replace(/\.[^/.]+$/, "");
+            resetUIForStart(true);
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                statusText.innerText = 'در حال خواندن ساختار فایل...';
+                setTimeout(() => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array', raw: true });
+                        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                        
+                        statOriginal.innerText = jsonData.length.toLocaleString();
+                        if(jsonData.length === 0) { alert("دیتابیس خالی است!"); return resetUIForStart(false); }
+                        
+                        if (currentMode === 1) {
+                            processMode1(jsonData); // موتور رابطه‌ای (از پلاک / تا پلاک)
+                        } else {
+                            processMode2(jsonData); // موتور ستونی مستقل (نظریه محمد)
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert("خطای کرنل: ساختار فایل مخدوش است.");
+                        resetUIForStart(false);
+                    }
+                }, 50);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        // ----------------------------------------------------------------
+        // [موتور ۱] معماری رابطه‌ای افقی (Row-based Relational)
+        // ----------------------------------------------------------------
+        function processMode1(originalData) {
+            finalProcessedData = [];
+            const totalRows = originalData.length;
+            const keys = Object.keys(originalData[0]);
+            
+            const colStartKey = keys.find(k => k.trim().includes('از پلاک'));
+            const colEndKey = keys.find(k => k.trim().includes('تا پلاک'));
+
+            if (!colStartKey || !colEndKey) {
+                alert("اخطار استراتژیک: ستون‌های 'از پلاک' و 'تا پلاک' در فایل یافت نشدند.");
+                return resetUIForStart(false);
+            }
+
+            let currentIndex = 0;
+            statusText.innerText = 'موتور ۱ فعال: در حال بسط بازه‌های افقی...';
+
+            function processChunk() {
+                let end = Math.min(currentIndex + 300, totalRows);
+                for (let i = currentIndex; i < end; i++) {
+                    let row = originalData[i];
+                    let startStr = String(row[colStartKey] || "").trim();
+                    let endStr = String(row[colEndKey] || "").trim();
+
+                    if (!startStr || !endStr) {
+                        finalProcessedData.push({ ...row });
+                        continue;
+                    }
+
+                    try {
+                        let maxLen = Math.max(startStr.length, endStr.length);
+                        let startNum = BigInt(startStr);
+                        let endNum = BigInt(endStr);
+                        if (startNum > endNum) { let temp = startNum; startNum = endNum; endNum = temp; }
+
+                        for (let currentNum = startNum; currentNum <= endNum; currentNum++) {
+                            let newRow = { ...row };
+                            newRow[colStartKey] = currentNum.toString().padStart(maxLen, '0');
+                            finalProcessedData.push(newRow);
+                        }
+                    } catch (e) { finalProcessedData.push({ ...row }); }
+                }
+
+                // هندلینگ پیشرفت
+                statNew.innerText = finalProcessedData.length.toLocaleString();
+                let percent = Math.floor((currentIndex / totalRows) * 100);
+                progressBar.style.width = percent + '%';
+                progressPercent.innerText = percent + '%';
+
+                if (currentIndex < totalRows) {
+                    currentIndex = end;
+                    requestAnimationFrame(processChunk);
+                } else {
+                    finishProcessing();
+                }
+            }
+            requestAnimationFrame(processChunk);
+        }
+
+        // ----------------------------------------------------------------
+        // [موتور ۲] معماری ستونی مستقل (Columnar Independent) - ایده طلایی محمد
+        // ----------------------------------------------------------------
+        function processMode2(originalData) {
+            finalProcessedData = [];
+            const columns = Object.keys(originalData[0]);
+            const totalOriginalRows = originalData.length;
+            
+            // تخصیص فضای مجزا برای هر ستون (ایجاد سیلوهای عمودی)
+            let processedColumns = {};
+            columns.forEach(c => processedColumns[c] = []);
+
+            let currentColIndex = 0;
+            let currentRowIndex = 0;
+            const totalCells = columns.length * totalOriginalRows;
+            let processedCells = 0;
+
+            // تابع فیلتر امنیتی: تشخیص اعداد خالص (جلوگیری از نابودی تاریخ و متن)
+            const isPureNumber = (str) => /^\d+$/.test(str.trim());
+
+            statusText.innerText = 'موتور ۲ فعال: در حال جراحی و پردازش مستقل ستون‌ها...';
+
+            function processChunk() {
+                // پردازش 1000 سلول در هر فریم برای سرعت بالا و روانی مرورگر
+                let cellsToProcessThisChunk = 1000; 
+                let cellsProcessedThisChunk = 0;
+
+                while (currentColIndex < columns.length && cellsProcessedThisChunk < cellsToProcessThisChunk) {
+                    let colName = columns[currentColIndex];
+                    let row = originalData[currentRowIndex];
+                    let valStr = String(row[colName] !== undefined ? row[colName] : "").trim();
+
+                    if (valStr) {
+                        if (valStr.includes('-')) {
+                            let parts = valStr.split('-');
+                            let startStr = parts[0].trim();
+                            let tailStr = parts[1].trim();
+
+                            // شرط استراتژیک جیمی: فقط در صورتی بازه بساز که دو طرف خط‌تیره "عدد خالص" باشه
+                            if (parts.length === 2 && isPureNumber(startStr) && isPureNumber(tailStr)) {
+                                try {
+                                    let tailLen = tailStr.length;
+                                    // جراحی رشته: بریدن انتها و چسباندن تارگت جدید
+                                    let baseStr = startStr.slice(0, -tailLen);
+                                    let endStr = baseStr + tailStr;
+
+                                    let maxLen = Math.max(startStr.length, endStr.length);
+                                    let startNum = BigInt(startStr);
+                                    let endNum = BigInt(endStr);
+
+                                    // تصحیح ترتیب در صورت اشتباه کاربر
+                                    if (startNum > endNum) { let temp = startNum; startNum = endNum; endNum = temp; }
+
+                                    // تولید مقادیر به صورت عمودی در لوله (ستون) مخصوص به خود
+                                    for (let currentNum = startNum; currentNum <= endNum; currentNum++) {
+                                        processedColumns[colName].push(currentNum.toString().padStart(maxLen, '0'));
+                                    }
+                                } catch(e) {
+                                    processedColumns[colName].push(valStr); // در صورت باگ ریاضی، اصل دیتا حفظ شود
+                                }
+                            } else {
+                                // اگر فرمت تاریخ یا متن بود، بدون تغییر در ستون قرار بده
+                                processedColumns[colName].push(valStr);
+                            }
+                        } else {
+                            // اگر تک مقداری بود، بدون تغییر در ستون قرار بده
+                            processedColumns[colName].push(valStr);
+                        }
+                    } else {
+                        // اگر سلول در فایل اصلی خالی بود، جای خالی را حفظ کن
+                        processedColumns[colName].push(""); 
+                    }
+
+                    // حرکت در ماتریس اولیه
+                    currentRowIndex++;
+                    processedCells++;
+                    cellsProcessedThisChunk++;
+
+                    if (currentRowIndex >= totalOriginalRows) {
+                        currentRowIndex = 0;
+                        currentColIndex++; // رفتن به لوله (ستون) بعدی
+                    }
+                }
+
+                // بروزرسانی نوار پیشرفت
+                let percent = Math.floor((processedCells / totalCells) * 100);
+                progressBar.style.width = percent + '%';
+                progressPercent.innerText = percent + '%';
+
+                if (currentColIndex < columns.length) {
+                    requestAnimationFrame(processChunk);
+                } else {
+                    // پس از اتمام تمام ستون‌ها، ماتریس نامتقارن را بازسازی کن
+                    reconstructMatrix(processedColumns, columns);
+                }
+            }
+            requestAnimationFrame(processChunk);
+        }
+
+        // === بازسازی ماتریس برای معماری ستونی ===
+        function reconstructMatrix(processedColumns, columns) {
+            statusText.innerText = 'در حال بازسازی ماتریس نامتقارن (ایجاد سطرهای متغیر)...';
+            
+            setTimeout(() => {
+                // یافتن عمیق‌ترین ستون
+                let maxRows = 0;
+                columns.forEach(c => {
+                    if (processedColumns[c].length > maxRows) maxRows = processedColumns[c].length;
+                });
+
+                // بافتن ردیف‌های جدید بر اساس ستون‌های مجزا
+                for (let i = 0; i < maxRows; i++) {
+                    let newRow = {};
+                    columns.forEach(c => {
+                        // اگر ستون زودتر تمام شده بود، سلول خالی (Null/Empty) می‌گیرد
+                        newRow[c] = processedColumns[c][i] !== undefined ? processedColumns[c][i] : "";
+                    });
+                    finalProcessedData.push(newRow);
+                }
+
+                statNew.innerText = finalProcessedData.length.toLocaleString();
+                finishProcessing();
+            }, 100);
+        }
+
+        // === پایان پردازش و رندرینگ ===
+        function finishProcessing() {
+            statusText.innerText = 'عملیات با موفقیت کامپایل شد. آماده خروجی!';
+            progressBar.classList.replace('from-blue-500', 'from-emerald-400');
+            progressBar.classList.replace('to-emerald-400', 'to-emerald-600');
+            
+            renderPreviewTable(finalProcessedData);
+            downloadBtn.classList.remove('hidden');
+            downloadBtn.classList.add('flex');
+            startBtn.disabled = false; fileInput.disabled = false;
+        }
+
+        // === رندر موتور پیش‌نمایش ===
+        function renderPreviewTable(dataArray) {
+            if(dataArray.length === 0) return;
+            const previewData = dataArray.slice(0, 10);
+            const headers = Object.keys(previewData[0]);
+            
+            let headHTML = '<tr>';
+            headers.forEach(h => {
+                headHTML += `<th class="px-4 py-3 border-b border-slate-700 bg-slate-800 text-blue-400 font-bold">${h}</th>`;
+            });
+            headHTML += '</tr>';
+            tableHead.innerHTML = headHTML;
+
+            let bodyHTML = '';
+            previewData.forEach(row => {
+                bodyHTML += '<tr class="hover:bg-slate-700/50 transition-colors border-b border-slate-700/50">';
+                headers.forEach(h => {
+                    let val = row[h] || '';
+                    // در حالت دوم، مقادیر تولید شده رو کمی هایلایت می‌کنیم
+                    let cellClass = (val.length > 5) ? 'text-emerald-300' : 'text-slate-300';
+                    bodyHTML += `<td class="px-4 py-2 ${cellClass}">${val}</td>`;
+                });
+                bodyHTML += '</tr>';
+            });
+            tableBody.innerHTML = bodyHTML;
+        }
+
+        // === ماژول صادرات امن در حافظه (Memory-Safe CSV Blob Export) ===
+        downloadBtn.addEventListener('click', () => {
+            if (finalProcessedData.length === 0) return;
+
+            statusText.innerText = 'در حال فشرده‌سازی حافظه و ایجاد فایل دیتابیس...';
+            startBtn.disabled = true; downloadBtn.disabled = true;
+            
+            setTimeout(() => {
+                try {
+                    const headers = Object.keys(finalProcessedData[0]);
+                    let csvChunks = []; 
+                    csvChunks.push('\uFEFF' + headers.join(',') + '\n');
+                    
+                    finalProcessedData.forEach(row => {
+                        let rowData = headers.map(h => {
+                            let val = String(row[h] !== undefined ? row[h] : '');
+                            if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+                                val = '"' + val.replace(/"/g, '""') + '"';
+                            }
+                            return val;
+                        });
+                        csvChunks.push(rowData.join(',') + '\n');
+                    });
+
+                    const blob = new Blob(csvChunks, { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    
+                    let suffix = currentMode === 1 ? "_Mode_Classic" : "_Mode_Columnar";
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `${originalFileName}${suffix}.csv`);
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url); // بهینه‌سازی Garbage Collection
+                    
+                    statusText.innerText = 'فایل CSV با موفقیت اکسپورت شد!';
+                } catch (err) {
+                    console.error(err);
+                    alert("نشت حافظه (Memory Leak) رخ داد. حجم داده برای مرورگر بسیار زیاد است.");
+                } finally {
+                    startBtn.disabled = false; downloadBtn.disabled = false;
+                }
+            }, 100);
+        });
+
+        // === ریست کردن UI ===
+        function resetUIForStart(isProcessing = true) {
+            startBtn.disabled = isProcessing; fileInput.disabled = isProcessing;
+            downloadBtn.classList.add('hidden'); downloadBtn.classList.remove('flex');
+            progressBar.style.width = '0%'; progressPercent.innerText = '0%';
+            progressBar.classList.replace('from-emerald-400', 'from-blue-500');
+            progressBar.classList.replace('to-emerald-600', 'to-emerald-400');
+            if(!isProcessing) {
+                statusText.innerText = 'سیستم آماده دریافت دیتای جدید است...';
+                statOriginal.innerText = '0'; statNew.innerText = '0';
+                tableBody.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
