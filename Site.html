@@ -55,7 +55,7 @@
         box-shadow: 0 12px 30px rgba(43, 41, 39, 0.08);
         border: 1px solid var(--card-border);
         background: #FFFFFF;
-        touch-action: pan-y; /* بهبود عملکرد لمس در موبایل */
+        touch-action: pan-y;
     }
 
     .nexus-slider-track {
@@ -71,8 +71,9 @@
         display: block;
         text-decoration: none;
         position: relative;
-        aspect-ratio: 21 / 8; /* نسبت تصویر استاندار هیرو بنر در دسکتاپ */
+        aspect-ratio: 21 / 8; /* نسبت استاندارد در دسکتاپ */
         overflow: hidden;
+        background: #1a1a1a; /* پس‌زمینه هماهنگ با بنرها */
     }
 
     .nexus-slide-item img {
@@ -435,9 +436,10 @@
         color: var(--dark);
     }
 
-    /* تنظیمات اختصاصی موبایل و تبلت */
+    /* =========================================
+       تنظیمات رسپانسیو موبایل و تبلت (بهینه‌سازی اسلایدر)
+       ========================================= */
     @media (max-width: 1024px) {
-        .nexus-slide-item { aspect-ratio: 16 / 7; }
         .nexus-nav-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .nexus-category-card { height: 120px; padding: 12px; }
         .nexus-card-info h4 { font-size: 14px; }
@@ -446,7 +448,18 @@
 
     @media (max-width: 768px) {
         .nexus-slider-container { border-radius: 16px; }
-        .nexus-slide-item { aspect-ratio: 16 / 9; } /* نسبت بهینه‌شده برای موبایل */
+        
+        /* فیکس قطعی موبایل: نمایش کامل تصویر بدون کرپ شدن متون */
+        .nexus-slide-item {
+            aspect-ratio: auto; 
+            height: auto;
+        }
+        .nexus-slide-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
         .nexus-slider-arrow { width: 34px; height: 34px; font-size: 12px; }
         .nexus-slider-arrow.prev { right: 8px; }
         .nexus-slider-arrow.next { left: 8px; }
@@ -467,12 +480,10 @@
 <div class="nexus-widget-wrapper">
     <div class="nexus-container">
         
-        <!-- بخش اسلایدر هیرو (بالای دسته‌بندی‌ها) -->
+        <!-- بخش اسلایدر هیرو -->
         <section class="nexus-slider-section">
             <div class="nexus-slider-container" id="nexus-hero-slider">
-                <div class="nexus-slider-track" id="nexus-slider-track">
-                    <!-- توسط JS لود می‌شود -->
-                </div>
+                <div class="nexus-slider-track" id="nexus-slider-track"></div>
                 <button class="nexus-slider-arrow prev" id="slider-prev-btn"><i class="fa-solid fa-chevron-right"></i></button>
                 <button class="nexus-slider-arrow next" id="slider-next-btn"><i class="fa-solid fa-chevron-left"></i></button>
                 <div class="nexus-slider-dots" id="nexus-slider-dots"></div>
@@ -502,33 +513,12 @@
         fetchFromWooCommerce: true,
         baseUrl: window.location.origin,
 
-        // 🖼️ لیست بنرهای اسلایدر (آدرس لینک مقصد هر تصویر را در قسمت link قرار دهید)
         slides: [
-            { 
-                img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_4e4b9b55008b4425948d1434912f6dd2-scaled.webp', 
-                link: '#', // لینک مقصد بنر اول (مثلا: /product/iphone-16-pro)
-                title: 'بنر شماره ۱' 
-            },
-            { 
-                img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_642a0cf969104da1b5d6cd72272f8d77-scaled.webp', 
-                link: '#', // لینک مقصد بنر دوم
-                title: 'بنر شماره ۲' 
-            },
-            { 
-                img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5bc17b5a57ed42c7bb32ddcfb144b067-scaled.webp', 
-                link: '#', // لینک مقصد بنر سوم
-                title: 'بنر شماره ۳' 
-            },
-            { 
-                img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5fd3fc26ee8949e0b1e849c6e2285882-scaled.webp', 
-                link: '#', // لینک مقصد بنر چهارم
-                title: 'بنر شماره ۴' 
-            },
-            { 
-                img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_e0ff083cbdda436a9a3ee252ebc6c827-scaled.webp', 
-                link: '#', // لینک مقصد بنر پنجم
-                title: 'بنر شماره ۵' 
-            }
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_4e4b9b55008b4425948d1434912f6dd2-scaled.webp', link: '#', title: 'بنر ۱' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_642a0cf969104da1b5d6cd72272f8d77-scaled.webp', link: '#', title: 'بنر ۲' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5bc17b5a57ed42c7bb32ddcfb144b067-scaled.webp', link: '#', title: 'بنر ۳' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5fd3fc26ee8949e0b1e849c6e2285882-scaled.webp', link: '#', title: 'بنر ۴' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_e0ff083cbdda436a9a3ee252ebc6c827-scaled.webp', link: '#', title: 'بنر ۵' }
         ],
 
         categories: [
@@ -553,9 +543,6 @@
         ]
     };
 
-    // =========================================
-    // 🎡 جاوا اسکریپت اختصاصی اسلایدر (با پشتیبانی از Touch)
-    // =========================================
     let currentSlide = 0;
     let autoSlideTimer = null;
 
@@ -570,7 +557,6 @@
         dotsContainer.innerHTML = '';
 
         slides.forEach((slide, idx) => {
-            // ساخت المان هر اسلاید
             const slideA = document.createElement('a');
             slideA.href = slide.link || '#';
             slideA.className = 'nexus-slide-item';
@@ -578,18 +564,15 @@
             slideA.innerHTML = `<img src="${slide.img}" alt="${slide.title || 'Slide'}">`;
             track.appendChild(slideA);
 
-            // ساخت نقطه‌های کنترل
             const dot = document.createElement('div');
             dot.className = `nexus-dot ${idx === 0 ? 'active' : ''}`;
             dot.onclick = () => goToSlide(idx);
             dotsContainer.appendChild(dot);
         });
 
-        // رویداد فلش‌ها
         document.getElementById('slider-prev-btn').onclick = () => prevSlide();
         document.getElementById('slider-next-btn').onclick = () => nextSlide();
 
-        // رویدادهای لمسی (Touch Events) برای موبایل
         let startX = 0;
         let endX = 0;
         const sliderEl = document.getElementById('nexus-hero-slider');
@@ -606,7 +589,7 @@
         }, { passive: true });
 
         function handleSwipe() {
-            const threshold = 40; // حداقل جابه‌جایی بر حسب پیکسل
+            const threshold = 40;
             if (startX - endX > threshold) {
                 nextSlide();
             } else if (endX - startX > threshold) {
@@ -614,7 +597,6 @@
             }
         }
 
-        // توقف اسلایدر موقع Hover موس
         sliderEl.addEventListener('mouseenter', stopAutoSlide);
         sliderEl.addEventListener('mouseleave', startAutoSlide);
 
@@ -642,16 +624,13 @@
 
     function startAutoSlide() {
         stopAutoSlide();
-        autoSlideTimer = setInterval(() => { nextSlide(); }, 4000); // چرخش هر ۴ ثانیه
+        autoSlideTimer = setInterval(() => { nextSlide(); }, 4000);
     }
 
     function stopAutoSlide() {
         if (autoSlideTimer) clearInterval(autoSlideTimer);
     }
 
-    // =========================================
-    // 🛒 منطق اصلی رندر دسته‌بندی‌ها و ووکامرس
-    // =========================================
     function scrollToBelt(id) {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -680,10 +659,8 @@
     }
 
     function buildInitialUI() {
-        // ۱. اجرا و راه‌اندازی اسلایدر هیرو
         initNexusSlider();
 
-        // ۲. ساخت شبکه دسته‌بندی‌ها و نوارهای متحرک
         const gridContainer = document.getElementById('nexus-categories-grid');
         const beltsContainer = document.getElementById('nexus-belts-wrapper');
 
@@ -760,7 +737,6 @@
         } catch (e) {}
     }
 
-    // اجرای خودکار در فرانت‌اند و ادیتور المنتور
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', buildInitialUI);
     } else {
