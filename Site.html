@@ -29,7 +29,7 @@
     .nexus-container { max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
 
     /* =========================================
-       استایل‌های اختصاصی اسلایدر هیرو (قاب ژله‌ای)
+       استایل‌های اختصاصی اسلایدر هیرو (معماری سبک جدید)
        ========================================= */
     .nexus-slider-section {
         width: 100%;
@@ -45,13 +45,11 @@
         border: 1px solid var(--card-border);
         background: #FFFFFF;
         touch-action: pan-y;
-        /* جادوی تغییر نرم ارتفاع قاب متناسب با عکس */
-        transition: height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        /* لاجیک ارتفاع داینامیک حذف شد چون تصاویر استاندارد هستند */
     }
 
     .nexus-slider-track {
         display: flex;
-        /* جلوگیری از کش آمدن عکس‌های کوتاه‌تر در کنار بلندترها */
         align-items: flex-start; 
         transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         width: 100%;
@@ -65,7 +63,6 @@
         position: relative;
     }
 
-    /* عکس‌ها دقیقاً نسبت ابعاد طبیعی خودشان را حفظ می‌کنند */
     .nexus-slide-item img {
         width: 100%;
         height: auto;
@@ -222,11 +219,12 @@
         fetchFromWooCommerce: true,
         baseUrl: window.location.origin,
         slides: [
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_4e4b9b55008b4425948d1434912f6dd2-scaled.webp', link: '#', title: 'بنر ۱' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_642a0cf969104da1b5d6cd72272f8d77-scaled.webp', link: '#', title: 'بنر ۲' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5bc17b5a57ed42c7bb32ddcfb144b067-scaled.webp', link: '#', title: 'بنر ۳' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_5fd3fc26ee8949e0b1e849c6e2285882-scaled.webp', link: '#', title: 'بنر ۴' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/gfpgan_e0ff083cbdda436a9a3ee252ebc6c827-scaled.webp', link: '#', title: 'بنر ۵' }
+            /* تصاویر جدید استانداردی که آماده کردی اینجا جایگذاری شدند */
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner01.webp', link: '#', title: 'بنر ۱' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner02.webp', link: '#', title: 'بنر ۲' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner03.webp', link: '#', title: 'بنر ۳' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner04.webp', link: '#', title: 'بنر ۴' },
+            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner05.webp', link: '#', title: 'بنر ۵' }
         ],
         categories: [
             { id: 'cat-1', wcCatId: 15, wcSlug: 'iphone', catUrl: '/product-category/iphone/', title: 'آیفون‌ها', subTitle: 'سری ۱۶ و ۱۵ پرو', image: 'https://pngimg.com/uploads/iphone_14/iphone_14_PNG18.png', icon: 'fa-brands fa-apple' },
@@ -294,45 +292,21 @@
         sliderEl.addEventListener('mouseenter', stopAutoSlide);
         sliderEl.addEventListener('mouseleave', startAutoSlide);
 
-        // آپدیت کردن ارتفاع داینامیک موقع تغییر سایز صفحه (مثلاً چرخاندن گوشی)
-        window.addEventListener('resize', () => updateSliderUI(true));
-
         startAutoSlide();
-        // اجرای اولیه برای تنظیم ارتفاع
-        setTimeout(() => updateSliderUI(), 100);
     }
 
-    function updateSliderUI(isResize = false) {
+    /* تابع بهینه‌شده آپدیت UI بدون درگیری الکی با ارتفاع */
+    function updateSliderUI() {
         const track = document.getElementById('nexus-slider-track');
         const dots = document.querySelectorAll('.nexus-dot');
-        const container = document.getElementById('nexus-hero-slider');
-        const slidesEls = document.querySelectorAll('.nexus-slide-item');
         const totalSlides = NEXUS_WOO_CONFIG.slides.length;
 
         if (currentSlide >= totalSlides) currentSlide = 0;
         if (currentSlide < 0) currentSlide = totalSlides - 1;
 
-        if (!isResize) {
-            track.style.transform = `translateX(${currentSlide * 100}%)`;
-        }
+        track.style.transform = `translateX(${currentSlide * 100}%)`;
 
         dots.forEach((dot, idx) => { dot.classList.toggle('active', idx === currentSlide); });
-
-        // لاجیک تغییر ارتفاع داینامیک و فیکس شدن تصویر (The Jelly Frame Engine)
-        if (slidesEls[currentSlide]) {
-            const activeImg = slidesEls[currentSlide].querySelector('img');
-            const setDynamicHeight = () => {
-                if(slidesEls[currentSlide].offsetHeight > 10) {
-                    container.style.height = slidesEls[currentSlide].offsetHeight + 'px';
-                }
-            };
-            
-            if(activeImg.complete) {
-                setDynamicHeight();
-            } else {
-                activeImg.onload = setDynamicHeight;
-            }
-        }
     }
 
     function nextSlide() { currentSlide++; updateSliderUI(); }
