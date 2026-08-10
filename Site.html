@@ -1,21 +1,20 @@
 <!-- 
   =============================================================================
   پروژه: ویترین داینامیک اپل استار (نسخه المنتور)
-  معماری: HTML/CSS/JS خالص (بدون نیاز به افزونه سنگین)
+  معماری: HTML/CSS/JS خالص
   =============================================================================
 -->
 
-<!-- لود کردن آیکون‌ها و فونت (از CDN برای سرعت بیشتر) -->
+<!-- لود کردن آیکون‌ها و فونت -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css">
 
 <style>
-    /* 
-      ایزوله کردن محیط: تمام استایل‌ها فقط روی المان‌هایی اعمال میشه که داخل این کلاس باشن.
-      این کار جلوی تداخل با استایل‌های پیش‌فرض المنتور یا قالب وودمارت/هلو رو می‌گیره.
-    */
+    /* =========================================================================
+       ROOT / MAIN WRAPPER
+       ========================================================================= */
+
     .nexus-widget-wrapper {
-        /* متغیرهای رنگی سازمانی فروشگاه */
         --cream: #F7F3EE;
         --cream-soft: #EFE7DD;
         --beige: #CDB293;
@@ -25,24 +24,38 @@
         --card-light-bg: linear-gradient(135deg, #FFFFFF 0%, #FAF6F0 100%);
         --card-border: rgba(205, 178, 147, 0.4);
         --shadow-soft: 0 10px 25px rgba(43, 41, 39, 0.06);
-        
+
         font-family: 'Vazirmatn', Tahoma, sans-serif;
-        background-color: transparent; /* در المنتور بهتره بک‌گراند اصلی ترنسپرنت باشه تا روی سکشن بشینه */
+        background-color: transparent;
         direction: rtl;
         width: 100%;
         box-sizing: border-box;
     }
 
-    /* ریست کردن مارجین‌ها فقط برای المان‌های داخلی ویجت ما */
-    .nexus-widget-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    /* کانتینر اصلی که عرض محتوا رو مدیریت می‌کنه */
-    .nexus-container { max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+    .nexus-widget-wrapper *,
+    .nexus-widget-wrapper *::before,
+    .nexus-widget-wrapper *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-    /* =========================================
-       بخش اول: اسلایدر هیرو (Hero Slider)
-       ========================================= */
-    .nexus-slider-section { width: 100%; position: relative; }
+    .nexus-container {
+        max-width: 1320px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    /* =========================================================================
+       HERO SLIDER
+       ========================================================================= */
+
+    .nexus-slider-section {
+        width: 100%;
+        position: relative;
+    }
 
     .nexus-slider-container {
         position: relative;
@@ -52,29 +65,39 @@
         box-shadow: 0 12px 30px rgba(43, 41, 39, 0.08);
         border: 1px solid var(--card-border);
         background: #FFFFFF;
-        touch-action: pan-y; /* اجازه میده اسکرول عمودی گوشی مختل نشه */
+        touch-action: pan-y;
     }
 
-    /* تراک اصلی که عکس‌ها داخلش قطار میشن */
     .nexus-slider-track {
         display: flex;
-        align-items: flex-start; 
+        align-items: flex-start;
         transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         width: 100%;
-        will-change: transform; /* بهینه سازی برای رندر سخت‌افزاری (GPU) */
+        will-change: transform;
     }
 
     .nexus-slide-item {
-        min-width: 100%; /* هر عکس دقیقاً 100% عرض کانتینر رو می‌گیره */
+        min-width: 100%;
         display: block;
         text-decoration: none;
         position: relative;
     }
 
-    .nexus-slide-item img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
-    .nexus-slide-item:hover img { transform: scale(1.01); /* زوم ریز موقع هاور */ }
+    .nexus-slide-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+    }
 
-    /* دکمه‌های کنترل اسلایدر */
+    .nexus-slide-item:hover img {
+        transform: scale(1.01);
+    }
+
+    /* =========================================================================
+       SLIDER CONTROLS
+       ========================================================================= */
+
     .nexus-slider-arrow {
         position: absolute;
         top: 50%;
@@ -82,7 +105,7 @@
         width: 44px;
         height: 44px;
         background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(8px); /* افکت شیشه‌ای اپل استایل */
+        backdrop-filter: blur(8px);
         border: 1px solid var(--card-border);
         color: var(--dark);
         border-radius: 50%;
@@ -93,13 +116,23 @@
         z-index: 5;
         transition: all 0.3s ease;
         font-size: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .nexus-slider-arrow:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
-    .nexus-slider-arrow.prev { right: 16px; }
-    .nexus-slider-arrow.next { left: 16px; }
 
-    /* نقاط نشانگر پایین اسلایدر (Pagination) */
+    .nexus-slider-arrow:hover {
+        background: var(--dark);
+        color: var(--cream);
+        border-color: var(--dark);
+    }
+
+    .nexus-slider-arrow.prev {
+        right: 16px;
+    }
+
+    .nexus-slider-arrow.next {
+        left: 16px;
+    }
+
     .nexus-slider-dots {
         position: absolute;
         bottom: 16px;
@@ -113,513 +146,1605 @@
         border-radius: 20px;
         backdrop-filter: blur(6px);
     }
-    .nexus-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all 0.3s ease; }
-    .nexus-dot.active { background: var(--beige); width: 26px; border-radius: 10px; }
 
-    /* =========================================
-       بخش دوم: شبکه دسته‌بندی‌ها (Categories Grid)
-       ========================================= */
-    .nexus-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 0 4px; }
-    .nexus-section-title { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 10px; }
-    .nexus-section-title::before { content: ''; width: 5px; height: 22px; background: var(--beige); border-radius: 4px; display: inline-block; }
-    
-    .nexus-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    
-    /* کارت‌های دسته‌بندی (گرید بالا) */
-    .nexus-category-card { 
-        background: var(--card-light-bg); border-radius: 22px; padding: 18px 20px; height: 135px; 
-        display: flex; justify-content: space-between; align-items: center; text-decoration: none; 
-        position: relative; overflow: hidden; border: 1px solid var(--card-border); 
-        box-shadow: var(--shadow-soft); transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; 
+    .nexus-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-    .nexus-category-card:hover { transform: translateY(-6px); border-color: var(--beige); box-shadow: 0 18px 35px rgba(205, 178, 147, 0.25); background: #FFFFFF; }
-    
-    /* متن و آیکون داخل کارت دسته‌بندی */
-    .nexus-card-info { z-index: 2; display: flex; flex-direction: column; gap: 6px; max-width: 55%; }
-    .nexus-card-info h4 { color: var(--dark); font-size: 17px; font-weight: 800; line-height: 1.3; }
-    .nexus-card-info span { color: var(--beige-dark); font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-    .nexus-card-info span i { font-size: 14px; background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    /* عکس داخل کارت دسته‌بندی */
-    .nexus-card-img-wrapper { width: 45%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 2; position: relative; }
-    .nexus-card-img-wrapper img { max-width: 115%; max-height: 115%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(43, 41, 39, 0.15)); transition: transform 0.4s ease; }
-    .nexus-category-card:hover .nexus-card-img-wrapper img { transform: scale(1.12) rotate(-3deg); }
-    
-    /* هاله نور تزئینی گوشه کارت */
-    .nexus-card-glow { position: absolute; right: -25px; bottom: -25px; width: 110px; height: 110px; background: radial-gradient(circle, rgba(205, 178, 147, 0.25) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
-    
-    /* =========================================
-       بخش سوم: نوارهای متحرک محصولات (Infinite Marquee)
-       ========================================= */
-    .nexus-belts-wrapper { display: flex; flex-direction: column; gap: 30px; }
-    .nexus-belt-section { background: #FFFFFF; border-radius: 22px; padding: 20px 0; box-shadow: 0 6px 20px rgba(43, 41, 39, 0.05); border: 1px solid var(--cream-soft); overflow: hidden; scroll-margin-top: 20px; }
-    
-    .nexus-belt-header { padding: 0 24px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--silver); margin-bottom: 16px; }
-    
-    .nexus-belt-title-link { font-size: 17px; font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 8px; text-decoration: none; transition: opacity 0.2s; }
-    .nexus-belt-title-link:hover { opacity: 0.8; color: var(--beige-dark); }
-    
-    .nexus-belt-view-all { font-size: 12px; color: var(--beige-dark); font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: opacity 0.2s; background: var(--cream); padding: 5px 12px; border-radius: 12px; border: 1px solid var(--card-border); }
-    .nexus-belt-view-all:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
-    
-    /* کانتینر مخفی‌کننده بیرون‌زدگی‌ها (Overflow hidden) */
-    .nexus-belt-track-container { position: relative; width: 100%; overflow: hidden; display: flex; }
-    
-    /* خود نوار متحرک که به اندازه محتواش کش میاد */
-    .nexus-belt-track { display: flex; gap: 18px; width: max-content; will-change: transform; }
-    
-    /* کی‌فریم‌های انیمیشن بی‌نهایت - حرکت از 0 تا 50 درصد محتوا (چون محتوا کلون شده، تو 50% پرش نامرئی اتفاق میوفته) */
-    .nexus-move-rtl { animation: nexusMarqueeRTL 36s linear infinite; }
-    .nexus-move-ltr { animation: nexusMarqueeLTR 36s linear infinite; }
-    
-    /* وقتی موس رفت روی نوار، انیمیشن متوقف بشه تا کاربر بتونه کلیک کنه */
-    .nexus-belt-track-container:hover .nexus-belt-track { animation-play-state: paused; }
-    
-    @keyframes nexusMarqueeRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-    @keyframes nexusMarqueeLTR { 0% { transform: translateX(50%); } 100% { transform: translateX(0); } }
 
-    /* کارت فیزیکی محصولات */
-    .nexus-product-card { 
-        width: 210px; background: var(--cream); border-radius: 16px; padding: 14px; 
-        display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--dark); 
-        border: 1px solid var(--cream-soft); transition: all 0.3s ease; flex-shrink: 0; cursor: pointer; 
+    .nexus-dot.active {
+        background: var(--beige);
+        width: 26px;
+        border-radius: 10px;
     }
-    .nexus-product-card:hover { transform: translateY(-4px); background: #FFFFFF; border-color: var(--beige); box-shadow: 0 10px 20px rgba(43, 41, 39, 0.08); }
-    .nexus-product-thumb { width: 100%; height: 130px; background: #FFFFFF; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden; }
-    .nexus-product-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.3s; }
-    .nexus-product-card:hover .nexus-product-thumb img { transform: scale(1.08); }
-    .nexus-product-title { font-size: 13px; font-weight: 700; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
-    .nexus-product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-    .nexus-product-price { font-size: 13px; font-weight: 900; color: var(--dark); }
-    .nexus-add-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--dark); color: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 12px; transition: background 0.2s; }
-    .nexus-product-card:hover .nexus-add-btn { background: var(--beige); color: var(--dark); }
 
-    /* =========================================
-       بخش چهارم: رسپانسیو (Responsive Breakpoints)
-       ========================================= */
+    /* =========================================================================
+       CATEGORY SECTION
+       ========================================================================= */
+
+    .nexus-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 0 4px;
+    }
+
+    .nexus-section-title {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nexus-section-title::before {
+        content: '';
+        width: 5px;
+        height: 22px;
+        background: var(--beige);
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .nexus-nav-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    /* =========================================================================
+       CATEGORY CARD
+       ========================================================================= */
+
+    .nexus-category-card {
+        background: var(--card-light-bg);
+        border-radius: 22px;
+        padding: 18px 20px;
+        height: 135px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--card-border);
+        box-shadow: var(--shadow-soft);
+        transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        cursor: pointer;
+    }
+
+    .nexus-category-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--beige);
+        box-shadow: 0 18px 35px rgba(205, 178, 147, 0.25);
+        background: #FFFFFF;
+    }
+
+    .nexus-card-info {
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 55%;
+    }
+
+    .nexus-card-info h4 {
+        color: var(--dark);
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .nexus-card-info span {
+        color: var(--beige-dark);
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .nexus-card-info span i {
+        font-size: 14px;
+        background: linear-gradient(
+            135deg,
+            #8B5CF6 0%,
+            #EC4899 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* =========================================================================
+       CATEGORY IMAGE
+       ========================================================================= */
+
+    .nexus-card-img-wrapper {
+        width: 45%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        position: relative;
+    }
+
+    .nexus-card-img-wrapper img {
+        max-width: 115%;
+        max-height: 115%;
+        object-fit: contain;
+        filter: drop-shadow(
+            0 10px 15px rgba(43, 41, 39, 0.15)
+        );
+        transition: transform 0.4s ease;
+    }
+
+    .nexus-category-card:hover .nexus-card-img-wrapper img {
+        transform: scale(1.12) rotate(-3deg);
+    }
+
+    .nexus-card-glow {
+        position: absolute;
+        right: -25px;
+        bottom: -25px;
+        width: 110px;
+        height: 110px;
+        background: radial-gradient(
+            circle,
+            rgba(205, 178, 147, 0.25) 0%,
+            transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* =========================================================================
+       PRODUCT BELTS
+       ========================================================================= */
+
+    .nexus-belts-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .nexus-belt-section {
+        background: #FFFFFF;
+        border-radius: 22px;
+        padding: 20px 0;
+        box-shadow: 0 6px 20px rgba(43, 41, 39, 0.05);
+        border: 1px solid var(--cream-soft);
+        overflow: hidden;
+        scroll-margin-top: 20px;
+    }
+
+    .nexus-belt-header {
+        padding: 0 24px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed var(--silver);
+        margin-bottom: 16px;
+    }
+
+    .nexus-belt-title-link {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .nexus-belt-title-link:hover {
+        opacity: 0.8;
+        color: var(--beige-dark);
+    }
+
+    .nexus-belt-view-all {
+        font-size: 12px;
+        color: var(--beige-dark);
+        font-weight: 800;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: opacity 0.2s;
+        background: var(--cream);
+        padding: 5px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--card-border);
+    }
+
+    .nexus-belt-view-all:hover {
+        background: var(--dark);
+        color: var(--cream);
+        border-color: var(--dark);
+    }
+
+    .nexus-belt-track-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+    }
+
+    .nexus-belt-track {
+        display: flex;
+        gap: 18px;
+        width: max-content;
+        will-change: transform;
+    }
+
+    .nexus-move-rtl {
+        animation: nexusMarqueeRTL 36s linear infinite;
+    }
+
+    .nexus-move-ltr {
+        animation: nexusMarqueeLTR 36s linear infinite;
+    }
+
+    .nexus-belt-track-container:hover .nexus-belt-track {
+        animation-play-state: paused;
+    }
+
+    @keyframes nexusMarqueeRTL {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(50%);
+        }
+    }
+
+    @keyframes nexusMarqueeLTR {
+        0% {
+            transform: translateX(50%);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    /* =========================================================================
+       PRODUCT CARD
+       ========================================================================= */
+
+    .nexus-product-card {
+        width: 210px;
+        background: var(--cream);
+        border-radius: 16px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--dark);
+        border: 1px solid var(--cream-soft);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .nexus-product-card:hover {
+        transform: translateY(-4px);
+        background: #FFFFFF;
+        border-color: var(--beige);
+        box-shadow: 0 10px 20px rgba(43, 41, 39, 0.08);
+    }
+
+    .nexus-product-thumb {
+        width: 100%;
+        height: 130px;
+        background: #FFFFFF;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    .nexus-product-thumb img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s;
+    }
+
+    .nexus-product-card:hover .nexus-product-thumb img {
+        transform: scale(1.08);
+    }
+
+    .nexus-product-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: right;
+    }
+
+    .nexus-product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+    }
+
+    .nexus-product-price {
+        font-size: 13px;
+        font-weight: 900;
+        color: var(--dark);
+    }
+
+    .nexus-add-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--dark);
+        color: var(--cream);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: background 0.2s;
+    }
+
+    .nexus-product-card:hover .nexus-add-btn {
+        background: var(--beige);
+        color: var(--dark);
+    }
+
+    /* =========================================================================
+       RESPONSIVE
+       ========================================================================= */
+
     @media (max-width: 1024px) {
-        .nexus-nav-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .nexus-category-card { height: 120px; padding: 12px; }
-        .nexus-card-info h4 { font-size: 14px; }
-        .nexus-card-info span { font-size: 11px; }
+
+        .nexus-nav-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .nexus-category-card {
+            height: 120px;
+            padding: 12px;
+        }
+
+        .nexus-card-info h4 {
+            font-size: 14px;
+        }
+
+        .nexus-card-info span {
+            font-size: 11px;
+        }
     }
+
     @media (max-width: 768px) {
-        .nexus-slider-container { border-radius: 16px; }
-        .nexus-slider-arrow { width: 34px; height: 34px; font-size: 12px; }
-        .nexus-slider-arrow.prev { right: 8px; }
-        .nexus-slider-arrow.next { left: 8px; }
-        .nexus-slider-dots { bottom: 10px; padding: 4px 8px; }
-        .nexus-dot { width: 7px; height: 7px; }
-        .nexus-dot.active { width: 18px; }
-        .nexus-nav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .nexus-category-card { height: 110px; padding: 12px; border-radius: 14px; }
-        .nexus-card-info h4 { font-size: 13px; }
-        .nexus-product-card { width: 165px; padding: 10px; }
-        .nexus-product-thumb { height: 105px; }
-        .nexus-product-title { font-size: 12px; }
-        .nexus-product-price { font-size: 12px; }
+
+        .nexus-slider-container {
+            border-radius: 16px;
+        }
+
+        .nexus-slider-arrow {
+            width: 34px;
+            height: 34px;
+            font-size: 12px;
+        }
+
+        .nexus-slider-arrow.prev {
+            right: 8px;
+        }
+
+        .nexus-slider-arrow.next {
+            left: 8px;
+        }
+
+        .nexus-slider-dots {
+            bottom: 10px;
+            padding: 4px 8px;
+        }
+
+        .nexus-dot {
+            width: 7px;
+            height: 7px;
+        }
+
+        .nexus-dot.active {
+            width: 18px;
+        }
+
+        .nexus-nav-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .nexus-category-card {
+            height: 110px;
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .nexus-card-info h4 {
+            font-size: 13px;
+        }
+
+        .nexus-product-card {
+            width: 165px;
+            padding: 10px;
+        }
+
+        .nexus-product-thumb {
+            height: 105px;
+        }
+
+        .nexus-product-title {
+            font-size: 12px;
+        }
+
+        .nexus-product-price {
+            font-size: 12px;
+        }
     }
 </style>
 
-<!-- کانتینر اصلی HTML -->
+
+<!-- =========================================================================
+     MAIN HTML
+     ========================================================================= -->
+
 <div class="nexus-widget-wrapper">
+
     <div class="nexus-container">
-        <!-- سکشن اسلایدر بنرها -->
+
+        <!-- =================================================================
+             HERO SLIDER
+             ================================================================= -->
+
         <section class="nexus-slider-section">
-            <div class="nexus-slider-container" id="nexus-hero-slider">
-                <div class="nexus-slider-track" id="nexus-slider-track"></div>
-                <button class="nexus-slider-arrow prev" id="slider-prev-btn"><i class="fa-solid fa-chevron-right"></i></button>
-                <button class="nexus-slider-arrow next" id="slider-next-btn"><i class="fa-solid fa-chevron-left"></i></button>
-                <div class="nexus-slider-dots" id="nexus-slider-dots"></div>
+
+            <div
+                class="nexus-slider-container"
+                id="nexus-hero-slider"
+            >
+
+                <div
+                    class="nexus-slider-track"
+                    id="nexus-slider-track"
+                ></div>
+
+                <button
+                    class="nexus-slider-arrow prev"
+                    id="slider-prev-btn"
+                    type="button"
+                    aria-label="اسلاید قبلی"
+                >
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <button
+                    class="nexus-slider-arrow next"
+                    id="slider-next-btn"
+                    type="button"
+                    aria-label="اسلاید بعدی"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div
+                    class="nexus-slider-dots"
+                    id="nexus-slider-dots"
+                ></div>
+
             </div>
+
         </section>
 
-        <!-- سکشن کارت‌های دسته‌بندی -->
+
+        <!-- =================================================================
+             CATEGORY GRID
+             ================================================================= -->
+
         <section>
+
             <div class="nexus-section-header">
-                <h2 class="nexus-section-title">دسته‌بندی محصولات</h2>
+
+                <h2 class="nexus-section-title">
+                    دسته‌بندی محصولات
+                </h2>
+
             </div>
-            <div class="nexus-nav-grid" id="nexus-categories-grid"></div>
+
+            <div
+                class="nexus-nav-grid"
+                id="nexus-categories-grid"
+            ></div>
+
         </section>
 
-        <!-- سکشن ویترین متحرک کالاها -->
+
+        <!-- =================================================================
+             MOVING PRODUCT BELTS
+             ================================================================= -->
+
         <section>
+
             <div class="nexus-section-header">
-                <h2 class="nexus-section-title">ویترین متحرک محصولات</h2>
+
+                <h2 class="nexus-section-title">
+                    ویترین متحرک محصولات
+                </h2>
+
             </div>
-            <div class="nexus-belts-wrapper" id="nexus-belts-wrapper"></div>
+
+            <div
+                class="nexus-belts-wrapper"
+                id="nexus-belts-wrapper"
+            ></div>
+
         </section>
+
     </div>
+
 </div>
 
+
 <script>
-    /* =========================================================================
-       هسته منطقی جاوااسکریپت (Javascript Logic Core)
-       ========================================================================= */
+/* =========================================================================
+   NEXUS DYNAMIC STORE ENGINE
+   ========================================================================= */
 
-    // جلوگیری از اجرای چندباره در ادیتور المنتور
-    let nexusIsInitialized = false;
+let nexusIsInitialized = false;
 
-    // پیکربندی پایگاه داده محلی (تغییرات URL فروشگاهت رو اینجا بده)
-    const NEXUS_WOO_CONFIG = {
-        fetchFromWooCommerce: true, // سوئیچ اصلی: اگر false بشه کلا فقط دیتای دمو رو نشون میده
-        baseUrl: window.location.origin, // می‌تونی دستی بذاری 'https://applestarshop.ir'
-        slides: [
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner01.webp', link: '#', title: 'بنر ۱' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner02.webp', link: '#', title: 'بنر ۲' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner03.webp', link: '#', title: 'بنر ۳' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner04.webp', link: '#', title: 'بنر ۴' },
-            { img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner05.webp', link: '#', title: 'بنر ۵' }
-        ],
-        categories: [
-            // id: شناسه داخلی کد | wcCatId: آیدی دسته در ووکامرس | wcSlug: اسلاگ | catUrl: لینک صفحه آرشیو دسته
-            { id: 'cat-1', wcCatId: 15, wcSlug: 'iphone', catUrl: '/product-category/iphone/', title: 'آیفون‌ها', subTitle: 'سری ۱۶ و ۱۵ پرو', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Iphone.webp', icon: 'fa-brands fa-apple' },
-            { id: 'cat-2', wcCatId: 20, wcSlug: 'android', catUrl: '/product-category/android/', title: 'اندروید', subTitle: 'سامسونگ و شیائومی', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Android.webp', icon: 'fa-brands fa-android' },
-            { id: 'cat-3', wcCatId: 25, wcSlug: 'macbook', catUrl: '/product-category/macbook/', title: 'مک‌بوک', subTitle: 'تراشه‌های M3 و M2', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/MacBook.webp', icon: 'fa-solid fa-laptop' },
-            { id: 'cat-4', wcCatId: 35, wcSlug: 'ipad', catUrl: '/product-category/ipad/', title: 'آیپدها', subTitle: 'پرو و ایر M2', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Ipad.webp', icon: 'fa-solid fa-tablet-screen-button' },
-            { id: 'cat-5', wcCatId: 30, wcSlug: 'windows-laptop', catUrl: '/product-category/laptops/', title: 'لپ‌تاپ ویندوز', subTitle: 'طراحی و گیمینگ', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Windows_laptop-1.webp', icon: 'fa-brands fa-windows' },
-            { id: 'cat-6', wcCatId: 40, wcSlug: 'android-tablet', catUrl: '/product-category/tablets/', title: 'تبلت اندروید', subTitle: 'سری گلکسی تب', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Tablet_androidi.webp', icon: 'fa-solid fa-tablet' },
-            { id: 'cat-7', wcCatId: 45, wcSlug: 'consoles', catUrl: '/product-category/consoles/', title: 'کنسول بازی', subTitle: 'PS5 و ایکس‌باکس', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Consoles.webp', icon: 'fa-solid fa-gamepad' },
-            { id: 'cat-8', wcCatId: 50, wcSlug: 'gadgets', catUrl: '/product-category/gadgets/', title: 'گجت‌ها', subTitle: 'اپل واچ و ایرپاد', image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Gajet.webp', icon: 'fa-solid fa-headphones' }
-        ]
-    };
 
-    // دیتای پشتیبان (Fallback): اگر ووکامرس جواب نداد یا نت قطع بود، این محصولات فیک نمایش داده میشن
-    const FALLBACK_DEMO_DATA = {
-        'default': [
-            { name: 'محصول ویژه اپل استار', price: 'درحال بروزرسانی', permalink: '#', img: 'https://via.placeholder.com/200?text=AppleStar' },
-            { name: 'در حال بارگذاری...', price: 'درحال بروزرسانی', permalink: '#', img: 'https://via.placeholder.com/200?text=Loading' },
-            { name: 'محصول شگفت‌انگیز', price: 'درحال بروزرسانی', permalink: '#', img: 'https://via.placeholder.com/200?text=Offer' }
-        ]
-    };
+/* =========================================================================
+   WOOCOMMERCE CONFIGURATION
+   ========================================================================= */
 
-    // ---------------------------------------------------------
-    // متغیرهای گلوبال برای کنترل وضعیت اسلایدر
-    // ---------------------------------------------------------
-    let currentSlide = 0;
-    let autoSlideTimer = null;
+const NEXUS_WOO_CONFIG = {
 
-    // تابع راه‌اندازی اسلایدر هیرو
-    function initNexusSlider() {
-        const track = document.getElementById('nexus-slider-track');
-        const dotsContainer = document.getElementById('nexus-slider-dots');
-        const slides = NEXUS_WOO_CONFIG.slides;
+    fetchFromWooCommerce: true,
 
-        // شرط خروج زودهنگام (Guard Clause): اگه المان‌ها تو DOM نبودن اسکریپت رو متوقف کن که ارور نده
-        if (!track || !dotsContainer || slides.length === 0) return;
+    baseUrl: 'https://applestarshop.ir',
 
-        track.innerHTML = '';
-        dotsContainer.innerHTML = '';
+    /* ---------------------------------------------------------------------
+       HERO SLIDES
+       --------------------------------------------------------------------- */
 
-        /*
-           حلقه forEach روی آرایه Slides:
-           هدف: ایجاد تگ‌های <a> و <img> به تعداد بنرهایی که تو کانفیگ تعریف شدن.
-           همزمان برای هر عکس، یه نقطه (dot) هم این پایین می‌سازه و رویداد کلیک بهش میده.
-        */
-        slides.forEach((slide, idx) => {
-            // ساخت بدنه عکس و لینک
-            const slideA = document.createElement('a');
-            slideA.href = slide.link || '#';
-            slideA.className = 'nexus-slide-item';
-            slideA.target = '_self';
-            slideA.innerHTML = `<img src="${slide.img}" alt="${slide.title || 'Slide'}">`;
-            track.appendChild(slideA);
+    slides: [
 
-            // ساخت نقطه ناوبری
-            const dot = document.createElement('div');
-            // عملگر سه‌گانه (Ternary): اگر ایندکس صفر بود (اولین عکس)، کلاس active بده
-            dot.className = `nexus-dot ${idx === 0 ? 'active' : ''}`;
-            dot.onclick = () => goToSlide(idx);
-            dotsContainer.appendChild(dot);
-        });
+        {
+            img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner01.webp',
+            link: '#',
+            title: 'بنر ۱'
+        },
 
-        // بایند کردن ایونت دکمه‌های قبلی و بعدی
-        document.getElementById('slider-prev-btn').onclick = () => prevSlide();
-        document.getElementById('slider-next-btn').onclick = () => nextSlide();
+        {
+            img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner02.webp',
+            link: '#',
+            title: 'بنر ۲'
+        },
 
-        // ---------------------------------------------------------
-        // هندلر رویدادهای لمسی (Touch Events) برای موبایل
-        // ---------------------------------------------------------
-        let startX = 0; let endX = 0;
-        const sliderEl = document.getElementById('nexus-hero-slider');
+        {
+            img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner03.webp',
+            link: '#',
+            title: 'بنر ۳'
+        },
 
-        // وقتی کاربر انگشتش رو میذاره روی اسلایدر
-        sliderEl.addEventListener('touchstart', (e) => { 
-            startX = e.touches[0].clientX; 
-            stopAutoSlide(); // تایمر توقف میشه تا عکس وسط کار در نره
-        }, { passive: true });
+        {
+            img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner04.webp',
+            link: '#',
+            title: 'بنر ۴'
+        },
 
-        // وقتی انگشتش رو برمیداره
-        sliderEl.addEventListener('touchend', (e) => {
-            endX = e.changedTouches[0].clientX;
-            const threshold = 40; // پیکسل مورد نیاز برای تشخیص کشیدن (Swipe)
-            
-            /*
-               شرط If/Else if برای تشخیص جهت حرکت انگشت:
-               اگر (شروع - پایان) مثبت بود یعنی انگشت به چپ کشیده شده (عکس بعدی)
-               اگر (پایان - شروع) مثبت بود یعنی به راست کشیده شده (عکس قبلی)
-            */
-            if (startX - endX > threshold) {
+        {
+            img: 'https://applestarshop.ir/wp-content/uploads/2026/08/Baner05.webp',
+            link: '#',
+            title: 'بنر ۵'
+        }
+
+    ],
+
+
+    /* ---------------------------------------------------------------------
+       CATEGORIES
+       
+       تصاویر دقیقاً مطابق لینک‌هایی هستند که کاربر ارائه کرده است.
+       --------------------------------------------------------------------- */
+
+    categories: [
+
+        {
+            id: 'cat-1',
+            wcCatId: 15,
+            wcSlug: 'iphone',
+            catUrl: '/product-category/iphone/',
+            title: 'آیفون‌ها',
+            subTitle: 'سری ۱۶ و ۱۵ پرو',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Iphon.webp',
+
+            icon: 'fa-brands fa-apple'
+        },
+
+
+        {
+            id: 'cat-2',
+            wcCatId: 20,
+            wcSlug: 'android',
+            catUrl: '/product-category/android/',
+            title: 'اندروید',
+            subTitle: 'سامسونگ و شیائومی',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Android-phone.webp',
+
+            icon: 'fa-brands fa-android'
+        },
+
+
+        {
+            id: 'cat-3',
+            wcCatId: 25,
+            wcSlug: 'macbook',
+            catUrl: '/product-category/macbook/',
+            title: 'مک‌بوک',
+            subTitle: 'تراشه‌های M3 و M2',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Mackbook.webp',
+
+            icon: 'fa-solid fa-laptop'
+        },
+
+
+        {
+            id: 'cat-4',
+            wcCatId: 35,
+            wcSlug: 'ipad',
+            catUrl: '/product-category/ipad/',
+            title: 'آیپدها',
+            subTitle: 'پرو و ایر M2',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Ipad1.webp',
+
+            icon: 'fa-solid fa-tablet-screen-button'
+        },
+
+
+        {
+            id: 'cat-5',
+            wcCatId: 30,
+            wcSlug: 'windows-laptop',
+            catUrl: '/product-category/laptops/',
+            title: 'لپ‌تاپ ویندوز',
+            subTitle: 'طراحی و گیمینگ',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Laptop_windows-.webp',
+
+            icon: 'fa-brands fa-windows'
+        },
+
+
+        {
+            id: 'cat-6',
+            wcCatId: 40,
+            wcSlug: 'android-tablet',
+            catUrl: '/product-category/tablets/',
+            title: 'تبلت اندروید',
+            subTitle: 'سری گلکسی تب',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Tablet_android.webp',
+
+            icon: 'fa-solid fa-tablet'
+        },
+
+
+        {
+            id: 'cat-7',
+            wcCatId: 45,
+            wcSlug: 'consoles',
+            catUrl: '/product-category/consoles/',
+            title: 'کنسول بازی',
+            subTitle: 'PS5 و ایکس‌باکس',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Game-console.webp',
+
+            icon: 'fa-solid fa-gamepad'
+        },
+
+
+        {
+            id: 'cat-8',
+            wcCatId: 50,
+            wcSlug: 'gadgets',
+            catUrl: '/product-category/gadgets/',
+            title: 'گجت‌ها',
+            subTitle: 'اپل واچ و ایرپاد',
+
+            image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Gajet1.webp',
+
+            icon: 'fa-solid fa-headphones'
+        }
+
+    ]
+
+};
+
+
+/* =========================================================================
+   FALLBACK DEMO DATA
+   ========================================================================= */
+
+const FALLBACK_DEMO_DATA = {
+
+    default: [
+
+        {
+            name: 'محصول ویژه اپل استار',
+            price: 'درحال بروزرسانی',
+            permalink: '#',
+            img: 'https://via.placeholder.com/200?text=AppleStar'
+        },
+
+        {
+            name: 'در حال بارگذاری...',
+            price: 'درحال بروزرسانی',
+            permalink: '#',
+            img: 'https://via.placeholder.com/200?text=Loading'
+        },
+
+        {
+            name: 'محصول شگفت‌انگیز',
+            price: 'درحال بروزرسانی',
+            permalink: '#',
+            img: 'https://via.placeholder.com/200?text=Offer'
+        }
+
+    ]
+
+};
+
+
+/* =========================================================================
+   SLIDER STATE
+   ========================================================================= */
+
+let currentSlide = 0;
+let autoSlideTimer = null;
+
+
+/* =========================================================================
+   INITIALIZE SLIDER
+   ========================================================================= */
+
+function initNexusSlider() {
+
+    const track =
+        document.getElementById('nexus-slider-track');
+
+    const dotsContainer =
+        document.getElementById('nexus-slider-dots');
+
+    const slides =
+        NEXUS_WOO_CONFIG.slides;
+
+
+    if (
+        !track ||
+        !dotsContainer ||
+        slides.length === 0
+    ) {
+        return;
+    }
+
+
+    track.innerHTML = '';
+    dotsContainer.innerHTML = '';
+
+
+    slides.forEach((slide, idx) => {
+
+        const slideA =
+            document.createElement('a');
+
+        slideA.href =
+            slide.link || '#';
+
+        slideA.className =
+            'nexus-slide-item';
+
+        slideA.target =
+            '_self';
+
+
+        slideA.innerHTML = `
+            <img
+                src="${slide.img}"
+                alt="${slide.title || 'Slide'}"
+                loading="${idx === 0 ? 'eager' : 'lazy'}"
+            >
+        `;
+
+
+        track.appendChild(slideA);
+
+
+        const dot =
+            document.createElement('div');
+
+        dot.className =
+            `nexus-dot ${idx === 0 ? 'active' : ''}`;
+
+
+        dot.onclick =
+            () => goToSlide(idx);
+
+
+        dotsContainer.appendChild(dot);
+
+    });
+
+
+    const prevButton =
+        document.getElementById('slider-prev-btn');
+
+    const nextButton =
+        document.getElementById('slider-next-btn');
+
+
+    if (prevButton) {
+
+        prevButton.onclick =
+            () => prevSlide();
+
+    }
+
+
+    if (nextButton) {
+
+        nextButton.onclick =
+            () => nextSlide();
+
+    }
+
+
+    /* ---------------------------------------------------------------------
+       TOUCH / SWIPE
+       --------------------------------------------------------------------- */
+
+    let startX = 0;
+    let endX = 0;
+
+
+    const sliderEl =
+        document.getElementById('nexus-hero-slider');
+
+
+    if (!sliderEl) {
+        return;
+    }
+
+
+    sliderEl.addEventListener(
+        'touchstart',
+        (e) => {
+
+            startX =
+                e.touches[0].clientX;
+
+            stopAutoSlide();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    sliderEl.addEventListener(
+        'touchend',
+        (e) => {
+
+            endX =
+                e.changedTouches[0].clientX;
+
+
+            const threshold = 40;
+
+
+            if (
+                startX - endX >
+                threshold
+            ) {
+
                 nextSlide();
-            } else if (endX - startX > threshold) {
+
+            }
+
+            else if (
+                endX - startX >
+                threshold
+            ) {
+
                 prevSlide();
+
             }
-            startAutoSlide(); // راه‌اندازی مجدد تایمر چرخش خودکار
-        }, { passive: true });
 
-        // توقف حرکت روی دسکتاپ با هاور کردن ماوس
-        sliderEl.addEventListener('mouseenter', stopAutoSlide);
-        sliderEl.addEventListener('mouseleave', startAutoSlide);
 
-        startAutoSlide(); // استارت اولیه
+            startAutoSlide();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    sliderEl.addEventListener(
+        'mouseenter',
+        stopAutoSlide
+    );
+
+
+    sliderEl.addEventListener(
+        'mouseleave',
+        startAutoSlide
+    );
+
+
+    startAutoSlide();
+
+}
+
+
+/* =========================================================================
+   UPDATE SLIDER
+   ========================================================================= */
+
+function updateSliderUI() {
+
+    const track =
+        document.getElementById('nexus-slider-track');
+
+    const dots =
+        document.querySelectorAll('.nexus-dot');
+
+    const totalSlides =
+        NEXUS_WOO_CONFIG.slides.length;
+
+
+    if (!track || totalSlides === 0) {
+        return;
     }
 
-    // تابع آپدیت رابط کاربری اسلایدر هنگام تغییر عکس
-    function updateSliderUI() {
-        const track = document.getElementById('nexus-slider-track');
-        const dots = document.querySelectorAll('.nexus-dot');
-        const totalSlides = NEXUS_WOO_CONFIG.slides.length;
 
-        /*
-           شرط‌های کنترل مرز (Boundary Conditions):
-           اگر اسلاید فعلی از کل عکس‌ها بیشتر شد، برگرد به عکس اول (ایندکس 0)
-           اگر از عکس اول به عقب رفت، برو به عکس آخر
-        */
-        if (currentSlide >= totalSlides) currentSlide = 0;
-        if (currentSlide < 0) currentSlide = totalSlides - 1;
+    if (
+        currentSlide >=
+        totalSlides
+    ) {
 
-        // اعمال جابجایی با ویژگی Transform CSS
-        track.style.transform = `translateX(${currentSlide * 100}%)`;
+        currentSlide = 0;
 
-        /*
-           حلقه forEach روی نقطه‌ها:
-           چک می‌کنه کدوم نقطه هم‌شماره با اسلاید فعلیه، بهش کلاس active میده و از بقیه میگیره
-        */
-        dots.forEach((dot, idx) => { 
-            dot.classList.toggle('active', idx === currentSlide); 
+    }
+
+
+    if (
+        currentSlide < 0
+    ) {
+
+        currentSlide =
+            totalSlides - 1;
+
+    }
+
+
+    track.style.transform =
+        `translateX(${currentSlide * 100}%)`;
+
+
+    dots.forEach(
+        (dot, idx) => {
+
+            dot.classList.toggle(
+                'active',
+                idx === currentSlide
+            );
+
+        }
+    );
+
+}
+
+
+function nextSlide() {
+
+    currentSlide++;
+
+    updateSliderUI();
+
+}
+
+
+function prevSlide() {
+
+    currentSlide--;
+
+    updateSliderUI();
+
+}
+
+
+function goToSlide(index) {
+
+    currentSlide =
+        index;
+
+    updateSliderUI();
+
+}
+
+
+function startAutoSlide() {
+
+    stopAutoSlide();
+
+    autoSlideTimer =
+        setInterval(
+            () => {
+
+                nextSlide();
+
+            },
+            4000
+        );
+
+}
+
+
+function stopAutoSlide() {
+
+    if (autoSlideTimer) {
+
+        clearInterval(
+            autoSlideTimer
+        );
+
+        autoSlideTimer = null;
+
+    }
+
+}
+
+
+/* =========================================================================
+   SCROLL TO PRODUCT BELT
+   ========================================================================= */
+
+function scrollToBelt(id) {
+
+    const el =
+        document.getElementById(id);
+
+
+    if (el) {
+
+        el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
         });
+
     }
 
-    function nextSlide() { currentSlide++; updateSliderUI(); }
-    function prevSlide() { currentSlide--; updateSliderUI(); }
-    function goToSlide(index) { currentSlide = index; updateSliderUI(); }
-    function startAutoSlide() { stopAutoSlide(); autoSlideTimer = setInterval(() => { nextSlide(); }, 4000); }
-    function stopAutoSlide() { if (autoSlideTimer) clearInterval(autoSlideTimer); }
+}
 
-    // اسکرول نرم (Smooth Scroll) از کارت بالا به نوار محصول پایین
-    function scrollToBelt(id) { 
-        const el = document.getElementById(id); 
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+
+/* =========================================================================
+   PRODUCT HTML GENERATOR
+   ========================================================================= */
+
+function generateProductsHTML(
+    products,
+    cat
+) {
+
+    let html = '';
+
+
+    if (
+        !Array.isArray(products) ||
+        products.length === 0
+    ) {
+
+        products =
+            FALLBACK_DEMO_DATA.default;
+
     }
 
-    // ---------------------------------------------------------
-    // موتور رندر نوار محصولات (Infinite HTML Generator)
-    // ---------------------------------------------------------
-    function generateProductsHTML(products, cat) {
-        let html = '';
-        
-        /*
-           الگوریتم تکرار هوشمند (Smart Cloning):
-           چرا اینجاست؟ انیمیشن Marquee تو CSS برای بی‌نهایت بودن نیاز داره که طول محتوا 
-           همیشه از طول مانیتور بیشتر باشه. اگه ووکامرس فقط 2 تا محصول برگردونه، نوار وسط راه قطع میشه!
-           
-           ریاضی: عدد 12 تقسیم بر تعداد محصولات میشه. 
-           مثال: اگر 3 محصول باشه -> 12/3 = 4 بار محصولات کلون میشن.
-           Math.max: تضمین می‌کنه که تحت هر شرایطی حداقل 3 بار کلون بشن (حتی اگه 10 تا محصول بود).
-        */
-        const repeatCount = Math.max(3, Math.ceil(12 / products.length));
-        
-        /* 
-           حلقه for اصلی: تعداد دفعات تکرار شدن کل آرایه رو کنترل می‌کنه
-        */
-        for (let r = 0; r < repeatCount; r++) {
-            
-            /*
-               حلقه forEach داخلی: تک‌تک محصولات رو به کد HTML تبدیل می‌کنه
-            */
-            products.forEach(p => {
+
+    const repeatCount =
+        Math.max(
+            3,
+            Math.ceil(
+                12 / products.length
+            )
+        );
+
+
+    for (
+        let r = 0;
+        r < repeatCount;
+        r++
+    ) {
+
+        products.forEach(
+            (p) => {
+
+                const productName =
+                    p.name ||
+                    'محصول اپل استار';
+
+
+                const productImage =
+                    p.img ||
+                    cat.image;
+
+
+                const productLink =
+                    p.permalink ||
+                    '#';
+
+
+                const productPrice =
+                    p.price ||
+                    'تماس بگیرید';
+
+
                 html += `
-                    <a href="${p.permalink}" class="nexus-product-card" target="_self">
+
+                    <a
+                        href="${productLink}"
+                        class="nexus-product-card"
+                        target="_self"
+                    >
+
                         <div class="nexus-product-thumb">
-                            <img src="${p.img}" alt="${p.name}" onerror="this.onerror=null; this.src='${cat.image}';">
+
+                            <img
+                                src="${productImage}"
+                                alt="${productName}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='${cat.image}';"
+                            >
+
                         </div>
-                        <div class="nexus-product-title">${p.name}</div>
+
+
+                        <div class="nexus-product-title">
+                            ${productName}
+                        </div>
+
+
                         <div class="nexus-product-footer">
-                            <div class="nexus-product-price">${p.price}</div>
-                            <div class="nexus-add-btn"><i class="fa-solid fa-arrow-left"></i></div>
+
+                            <div class="nexus-product-price">
+                                ${productPrice}
+                            </div>
+
+
+                            <div class="nexus-add-btn">
+
+                                <i class="fa-solid fa-arrow-left"></i>
+
+                            </div>
+
                         </div>
+
                     </a>
+
                 `;
-            });
-        }
-        return html;
+
+            }
+        );
+
     }
 
-    // ---------------------------------------------------------
-    // تابع اصلی بیلد کردن (ساخت) رابط کاربری در DOM
-    // ---------------------------------------------------------
-    function buildInitialUI() {
-        if (nexusIsInitialized) return; // جلوگیری از اجرای دوبار در المنتور
-        
-        initNexusSlider();
-        
-        const gridContainer = document.getElementById('nexus-categories-grid');
-        const beltsContainer = document.getElementById('nexus-belts-wrapper');
-        
-        if (!gridContainer || !beltsContainer) return;
 
-        // پاکسازی کانتینرها (برای مواقعی که المنتور ویجت رو رفرش می‌کنه)
-        gridContainer.innerHTML = '';
-        beltsContainer.innerHTML = '';
+    return html;
 
-        /*
-           حلقه forEach روی دسته‌بندی‌های کانفیگ:
-           برای هر دسته، یک کارت توی گرید بالا می‌سازه و یه سکشن نوار متحرک تو پایین.
-        */
-        NEXUS_WOO_CONFIG.categories.forEach((cat, index) => {
-            
-            // --- 1. ساخت کارت‌های شبکه (Grid) ---
-            const card = document.createElement('div');
-            card.className = 'nexus-category-card';
-            card.onclick = () => scrollToBelt(`belt-${cat.id}`);
+}
+
+
+/* =========================================================================
+   BUILD INITIAL UI
+   ========================================================================= */
+
+function buildInitialUI() {
+
+    if (nexusIsInitialized) {
+        return;
+    }
+
+
+    initNexusSlider();
+
+
+    const gridContainer =
+        document.getElementById(
+            'nexus-categories-grid'
+        );
+
+
+    const beltsContainer =
+        document.getElementById(
+            'nexus-belts-wrapper'
+        );
+
+
+    if (
+        !gridContainer ||
+        !beltsContainer
+    ) {
+
+        return;
+
+    }
+
+
+    gridContainer.innerHTML = '';
+    beltsContainer.innerHTML = '';
+
+
+    /* ---------------------------------------------------------------------
+       LOOP THROUGH CATEGORIES
+       --------------------------------------------------------------------- */
+
+    NEXUS_WOO_CONFIG.categories.forEach(
+        (cat, index) => {
+
+
+            /* =============================================================
+               CATEGORY GRID CARD
+               ============================================================= */
+
+            const card =
+                document.createElement('div');
+
+
+            card.className =
+                'nexus-category-card';
+
+
+            card.onclick =
+                () => scrollToBelt(
+                    `belt-${cat.id}`
+                );
+
+
             card.innerHTML = `
+
                 <div class="nexus-card-info">
-                    <h4>${cat.title}</h4>
-                    <span><i class="${cat.icon}"></i> ${cat.subTitle}</span>
+
+                    <h4>
+                        ${cat.title}
+                    </h4>
+
+                    <span>
+
+                        <i class="${cat.icon}"></i>
+
+                        ${cat.subTitle}
+
+                    </span>
+
                 </div>
+
+
                 <div class="nexus-card-img-wrapper">
-                    <img src="${cat.image}" alt="${cat.title}">
+
+                    <img
+                        src="${cat.image}"
+                        alt="${cat.title}"
+                        loading="lazy"
+                    >
+
                 </div>
+
+
                 <div class="nexus-card-glow"></div>
-            `;
-            gridContainer.appendChild(card);
 
-            // --- 2. ساخت نوار متحرک (Belt) ---
-            const beltSection = document.createElement('div');
-            beltSection.className = 'nexus-belt-section';
-            beltSection.id = `belt-${cat.id}`;
-            
-            /*
-               شرط سه‌گانه تعیین جهت حرکت:
-               اگه index زوج باشه انیمیشن RTL (راست به چپ) میده، اگه فرد باشه LTR (چپ به راست).
-               این باعث میشه نوارها یکی در میون برعکس هم حرکت کنن که از لحاظ بصری خیلی خفنه.
-            */
-            const directionClass = (index % 2 === 0) ? 'nexus-move-rtl' : 'nexus-move-ltr';
-            
-            // واکشی دیتای دمو (اگه دیتای اختصاصی برای اون آیدی نبود، دیفالت رو بده)
-            const demoProducts = FALLBACK_DEMO_DATA[cat.id] || FALLBACK_DEMO_DATA['default'];
-            
-            // تزریق کدهای HTML نوار
+            `;
+
+
+            gridContainer.appendChild(
+                card
+            );
+
+
+            /* =============================================================
+               PRODUCT BELT
+               ============================================================= */
+
+            const beltSection =
+                document.createElement('div');
+
+
+            beltSection.className =
+                'nexus-belt-section';
+
+
+            beltSection.id =
+                `belt-${cat.id}`;
+
+
+            const directionClass =
+                (index % 2 === 0)
+                    ? 'nexus-move-rtl'
+                    : 'nexus-move-ltr';
+
+
+            const demoProducts =
+                FALLBACK_DEMO_DATA[cat.id] ||
+                FALLBACK_DEMO_DATA.default;
+
+
             beltSection.innerHTML = `
+
                 <div class="nexus-belt-header">
-                    <a href="${cat.catUrl}" target="_self" class="nexus-belt-title-link">
-                        <i class="${cat.icon}" style="color: var(--beige-dark);"></i> 
-                        محصولات دسته ${cat.title}
+
+                    <a
+                        href="${cat.catUrl}"
+                        target="_self"
+                        class="nexus-belt-title-link"
+                    >
+
+                        <i
+                            class="${cat.icon}"
+                            style="color: var(--beige-dark);"
+                        ></i>
+
+                        محصولات دسته
+                        ${cat.title}
+
                     </a>
-                    <a href="${cat.catUrl}" target="_self" class="nexus-belt-view-all">
-                        مشاهده همه <i class="fa-solid fa-arrow-left"></i>
+
+
+                    <a
+                        href="${cat.catUrl}"
+                        target="_self"
+                        class="nexus-belt-view-all"
+                    >
+
+                        مشاهده همه
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
                     </a>
+
                 </div>
+
+
                 <div class="nexus-belt-track-container">
-                    <div class="nexus-belt-track ${directionClass}" id="track-${cat.id}">
-                        ${generateProductsHTML(demoProducts, cat)}
+
+                    <div
+                        class="nexus-belt-track ${directionClass}"
+                        id="track-${cat.id}"
+                    >
+
+                        ${generateProductsHTML(
+                            demoProducts,
+                            cat
+                        )}
+
                     </div>
+
                 </div>
+
             `;
-            beltsContainer.appendChild(beltSection);
 
-            /*
-               شرط If برای Fetch:
-               اگر تو تنظیمات بالا، گرفتن دیتا از ووکامرس رو True کرده باشی، این تابع فراخوانی میشه.
-            */
-            if (NEXUS_WOO_CONFIG.fetchFromWooCommerce) {
-                fetchAndHydrateWooData(cat);
+
+            beltsContainer.appendChild(
+                beltSection
+            );
+
+
+            /* =============================================================
+               WOOCOMMERCE API
+               ============================================================= */
+
+            if (
+                NEXUS_WOO_CONFIG
+                    .fetchFromWooCommerce
+            ) {
+
+                fetchAndHydrateWooData(
+                    cat
+                );
+
             }
-        });
 
-        nexusIsInitialized = true;
-    }
-
-    // ---------------------------------------------------------
-    // موتور Async/Await برای اتصال به REST API ووکامرس
-    // ---------------------------------------------------------
-    async function fetchAndHydrateWooData(cat) {
-        try {
-            // ساخت لینک درخواست به ووکامرس (گرفتن 8 محصول آخر از دسته مورد نظر)
-            const apiUrl = `${NEXUS_WOO_CONFIG.baseUrl}/wp-json/wc/store/v1/products?category=${cat.wcCatId}&per_page=8`;
-            
-            // اجرای ریکوئست
-            const response = await fetch(apiUrl);
-            
-            /*
-               شرط چک کردن موفقیت سرور: 
-               اگر ارور 404 یا 500 بده، کلا متوقف میشه تا دیتای دمو کار رو ادامه بده و ارور تو صفحه نریزه.
-            */
-            if (!response.ok) return; 
-            
-            const data = await response.json();
-            
-            /*
-               شرط If برای صحت دیتا: 
-               چک می‌کنه آیا جواب سرور یه آرایه‌ست و آیا اصلا داخلش محصولی هست (طول > 0)
-            */
-            if (Array.isArray(data) && data.length > 0) {
-                
-                // متد map: تبدیل دیتای خام ووکامرس به آبجکت ترتمیزی که سیستم ما نیاز داره
-                const wooProducts = data.map(item => {
-                    let formattedPrice = 'تماس بگیرید';
-                    
-                    /*
-                       شرط تو در تو (Nested If) برای قیمت:
-                       چک می‌کنه آیا آبجکت قیمت از سمت ووکامرس برگشته یا نه.
-                       ووکامرس قیمت رو به صورت استرینگ خام میده (مثلا 1000000). ما اینجا سه رقم سه رقم جداش می‌کنیم
-                       و واحد پول سایت رو هم بهش می‌چسبونیم (Fa-IR format).
-                    */
-                    if (item.prices && item.prices.price) {
-                        const rawPrice = parseInt(item.prices.price) / Math.pow(10, item.prices.currency_minor_unit || 0);
-                        formattedPrice = rawPrice.toLocaleString('fa-IR') + ' ' + (item.prices.currency_symbol || 'تومان');
-                    }
-                    
-                    /*
-                       شرط استخراج عکس:
-                       اگر محصول عکسی نداشت، همون آیکون گرافیکی دسته‌بندی رو به عنوان عکس پیش‌فرض (Fallback) قرار میده.
-                    */
-                    const imageSrc = (item.images && item.images.length > 0) ? item.images[0].src : cat.image;
-                    
-                    return { 
-                        name: item.name, 
-                        price: formattedPrice, 
-                        permalink: item.permalink || '#', 
-                        img: imageSrc 
-                    };
-                });
-                
-                // پیدا کردن کانتینر اختصاصی همون دسته و تزریق دیتای واقعی روی دیتای دمو
-                const trackEl = document.getElementById(`track-${cat.id}`);
-                if (trackEl) {
-                    trackEl.innerHTML = generateProductsHTML(wooProducts, cat);
-                }
-            }
-            
-        } catch (e) {
-            // بلوک Catch: اگر اینترنت کاربر قطع بود یا سرور Timeout داد، هیچ اروری به کاربر نشون نمیده
-            // سیستم با همون محصولات فال‌بک ادامه میده. فقط برای دولوپر لاگ میندازه.
-            console.log(`سیستم: عدم دریافت اطلاعات دسته ${cat.title} - استفاده از دیتای آفلاین.`);
         }
+    );
+
+
+    nexusIsInitialized =
+        true;
+
+}
+
+
+/* =========================================================================
+   WOOCOMMERCE API ENGINE
+   ========================================================================= */
+
+async function fetchAndHydrateWooData(cat) {
+
+    try {
+
+        const apiUrl =
+            `${NEXUS_WOO_CONFIG.baseUrl}/wp-json/wc/store/v1/products?category=${cat.wcCatId}&per_page=8`;
+
+
+        const response =
+            await fetch(apiUrl);
+
+
+        if (!response.ok) {
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const wooProducts =
+            data.map(
+                (item) => {
+
+
+                    let formattedPrice =
+                        'تماس بگیرید';
+
+
+                    /* -----------------------------------------------------
+                       PRICE
+                       ----------------------------------------------------- */
+
+                    if (
+                        item.prices &&
+                        item.prices.price
+                    ) {
+
+                        const rawPrice =
+                            parseInt(
+                                item.prices.price,
+                                10
+                            ) /
+                            Math.pow(
+                                10,
+                                item.prices.currency_minor_unit || 0
+                            );
+
+
+                        formattedPrice =
+                            rawPrice.toLocaleString(
+                                'fa-IR'
+                            ) +
+                            ' ' +
+                            (
+                                item.prices.currency_symbol ||
+                                'تومان'
+                            );
+
+                    }
+
+
+                    /* -----------------------------------------------------
+                       IMAGE
+                       ----------------------------------------------------- */
+
+                    const imageSrc =
+                        (
+                            item.images &&
+                            item.images.length > 0
+                        )
+                            ? item.images[0].src
+                            : cat.image;
+
+
+                    return {
+
+                        name:
+                            item.name,
+
+                        price:
+                            formattedPrice,
+
+                        permalink:
+                            item.permalink ||
+                            '#',
+
+                        img:
+                            imageSrc
+
+                    };
+
+                }
+            );
+
+
+        const trackEl =
+            document.getElementById(
+                `track-${cat.id}`
+            );
+
+
+        if (trackEl) {
+
+            trackEl.innerHTML =
+                generateProductsHTML(
+                    wooProducts,
+                    cat
+                );
+
+        }
+
     }
 
-    // ---------------------------------------------------------
-    // استارتر ایمن (Safe Initialization) مخصوص المنتور
-    // ---------------------------------------------------------
-    /*
-       شرط If/Else برای اجرای صحیح:
-       این بخش خیلی حیاتیه. اگر داکیومنت در لحظه خوندن کد قبلاً کامل لود شده بود (مثل وقتی المنتور
-       ویجت رو رفرش می‌کنه)، مستقیم تابع رو اجرا می‌کنه. اگر در حال لود بود (بار اول ورود کاربر)،
-       صبر می‌کنه تا ایونت DOMContentLoaded فایر بشه.
-    */
-    if (document.readyState === 'complete' || document.readyState === 'interactive') { 
-        setTimeout(buildInitialUI, 100); // تاخیر عمدی 100 میلی‌ثانیه برای نشستن کامل DOM المنتور
-    } else { 
-        document.addEventListener('DOMContentLoaded', buildInitialUI); 
+    catch (e) {
+
+        console.log(
+            `سیستم: عدم دریافت اطلاعات دسته ${cat.title} - استفاده از دیتای آفلاین.`
+        );
+
     }
+
+}
+
+
+/* =========================================================================
+   SAFE INITIALIZATION FOR ELEMENTOR
+   ========================================================================= */
+
+if (
+    document.readyState === 'complete' ||
+    document.readyState === 'interactive'
+) {
+
+    setTimeout(
+        buildInitialUI,
+        100
+    );
+
+}
+
+else {
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        buildInitialUI
+    );
+
+}
 </script>
