@@ -1,18 +1,6 @@
-https://applestarshop.ir/product-category/labtop/laptop-windows/
-https://applestarshop.ir/product-category/mobail/iphone-mobail/
-https://applestarshop.ir/product-category/mobail/android/
-https://applestarshop.ir/product-category/labtop/macbook/
-https://applestarshop.ir/product-category/gajet/
-https://applestarshop.ir/product-category/tablet/tablet-androidi/
-https://applestarshop.ir/product-category/tablet/ipad/
-https://applestarshop.ir/product-category/game-console/
-
-
-
-
 <!-- 
   =============================================================================
-  پروژه: ویترین داینامیک اپل استار (نسخه المنتور)
+  پروژه: ویترین داینامیک اپل استار (نسخه المنتور - کاملاً فشرده و بدون حاشیه)
   معماری: HTML/CSS/JS خالص
   =============================================================================
 -->
@@ -23,7 +11,7 @@ https://applestarshop.ir/product-category/game-console/
 
 <style>
     /* =========================================================================
-       ROOT / MAIN WRAPPER
+       ROOT / MAIN WRAPPER (ZERO PADDING & MARGIN)
        ========================================================================= */
 
     .nexus-widget-wrapper {
@@ -40,8 +28,10 @@ https://applestarshop.ir/product-category/game-console/
         font-family: 'Vazirmatn', Tahoma, sans-serif;
         background-color: transparent;
         direction: rtl;
-        width: 100%;
+        width: 100% !important;
         box-sizing: border-box;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .nexus-widget-wrapper *,
@@ -53,11 +43,13 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-container {
-        max-width: 1320px;
-        margin: 0 auto;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 16px; /* فاصله بهینه و فشرده بین سکشن‌ها */
     }
 
     /* =========================================================================
@@ -67,17 +59,20 @@ https://applestarshop.ir/product-category/game-console/
     .nexus-slider-section {
         width: 100%;
         position: relative;
+        margin: 0;
+        padding: 0;
     }
 
     .nexus-slider-container {
         position: relative;
         width: 100%;
-        border-radius: 24px;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 12px 30px rgba(43, 41, 39, 0.08);
+        box-shadow: 0 8px 20px rgba(43, 41, 39, 0.06);
         border: 1px solid var(--card-border);
         background: #FFFFFF;
         touch-action: pan-y;
+        margin: 0;
     }
 
     .nexus-slider-track {
@@ -114,8 +109,8 @@ https://applestarshop.ir/product-category/game-console/
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(8px);
         border: 1px solid var(--card-border);
@@ -127,7 +122,7 @@ https://applestarshop.ir/product-category/game-console/
         cursor: pointer;
         z-index: 5;
         transition: all 0.3s ease;
-        font-size: 16px;
+        font-size: 15px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
@@ -138,30 +133,30 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-slider-arrow.prev {
-        right: 16px;
+        right: 12px;
     }
 
     .nexus-slider-arrow.next {
-        left: 16px;
+        left: 12px;
     }
 
     .nexus-slider-dots {
         position: absolute;
-        bottom: 16px;
+        bottom: 12px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 8px;
+        gap: 6px;
         z-index: 5;
         background: rgba(43, 41, 39, 0.3);
-        padding: 6px 12px;
+        padding: 4px 10px;
         border-radius: 20px;
         backdrop-filter: blur(6px);
     }
 
     .nexus-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.5);
         cursor: pointer;
@@ -170,7 +165,7 @@ https://applestarshop.ir/product-category/game-console/
 
     .nexus-dot.active {
         background: var(--beige);
-        width: 26px;
+        width: 22px;
         border-radius: 10px;
     }
 
@@ -182,23 +177,23 @@ https://applestarshop.ir/product-category/game-console/
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
-        padding: 0 4px;
+        margin-bottom: 10px;
+        padding: 0;
     }
 
     .nexus-section-title {
-        font-size: 22px;
+        font-size: 18px;
         font-weight: 900;
         color: var(--dark);
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
 
     .nexus-section-title::before {
         content: '';
-        width: 5px;
-        height: 22px;
+        width: 4px;
+        height: 18px;
         background: var(--beige);
         border-radius: 4px;
         display: inline-block;
@@ -207,7 +202,7 @@ https://applestarshop.ir/product-category/game-console/
     .nexus-nav-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
+        gap: 12px;
     }
 
     /* =========================================================================
@@ -216,9 +211,9 @@ https://applestarshop.ir/product-category/game-console/
 
     .nexus-category-card {
         background: var(--card-light-bg);
-        border-radius: 22px;
-        padding: 18px 20px;
-        height: 135px;
+        border-radius: 16px;
+        padding: 14px 16px;
+        height: 120px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -232,9 +227,9 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-category-card:hover {
-        transform: translateY(-6px);
+        transform: translateY(-4px);
         border-color: var(--beige);
-        box-shadow: 0 18px 35px rgba(205, 178, 147, 0.25);
+        box-shadow: 0 12px 25px rgba(205, 178, 147, 0.2);
         background: #FFFFFF;
     }
 
@@ -242,28 +237,28 @@ https://applestarshop.ir/product-category/game-console/
         z-index: 2;
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        max-width: 55%;
+        gap: 4px;
+        max-width: 60%;
     }
 
     .nexus-card-info h4 {
         color: var(--dark);
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 800;
         line-height: 1.3;
     }
 
     .nexus-card-info span {
         color: var(--beige-dark);
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
     }
 
     .nexus-card-info span i {
-        font-size: 14px;
+        font-size: 12px;
         background: linear-gradient(
             135deg,
             #8B5CF6 0%,
@@ -278,7 +273,7 @@ https://applestarshop.ir/product-category/game-console/
        ========================================================================= */
 
     .nexus-card-img-wrapper {
-        width: 45%;
+        width: 40%;
         height: 100%;
         display: flex;
         align-items: center;
@@ -288,25 +283,25 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-card-img-wrapper img {
-        max-width: 115%;
-        max-height: 115%;
+        max-width: 110%;
+        max-height: 110%;
         object-fit: contain;
         filter: drop-shadow(
-            0 10px 15px rgba(43, 41, 39, 0.15)
+            0 8px 12px rgba(43, 41, 39, 0.12)
         );
         transition: transform 0.4s ease;
     }
 
     .nexus-category-card:hover .nexus-card-img-wrapper img {
-        transform: scale(1.12) rotate(-3deg);
+        transform: scale(1.1) rotate(-3deg);
     }
 
     .nexus-card-glow {
         position: absolute;
         right: -25px;
         bottom: -25px;
-        width: 110px;
-        height: 110px;
+        width: 100px;
+        height: 100px;
         background: radial-gradient(
             circle,
             rgba(205, 178, 147, 0.25) 0%,
@@ -323,35 +318,36 @@ https://applestarshop.ir/product-category/game-console/
     .nexus-belts-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 16px;
     }
 
     .nexus-belt-section {
         background: #FFFFFF;
-        border-radius: 22px;
-        padding: 20px 0;
-        box-shadow: 0 6px 20px rgba(43, 41, 39, 0.05);
+        border-radius: 16px;
+        padding: 12px 0;
+        box-shadow: 0 4px 15px rgba(43, 41, 39, 0.04);
         border: 1px solid var(--cream-soft);
         overflow: hidden;
-        scroll-margin-top: 20px;
+        scroll-margin-top: 10px;
+        margin: 0;
     }
 
     .nexus-belt-header {
-        padding: 0 24px 14px;
+        padding: 0 16px 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px dashed var(--silver);
-        margin-bottom: 16px;
+        margin-bottom: 12px;
     }
 
     .nexus-belt-title-link {
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 800;
         color: var(--dark);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         text-decoration: none;
         transition: opacity 0.2s;
     }
@@ -362,7 +358,7 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-belt-view-all {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--beige-dark);
         font-weight: 800;
         text-decoration: none;
@@ -371,8 +367,8 @@ https://applestarshop.ir/product-category/game-console/
         gap: 4px;
         transition: opacity 0.2s;
         background: var(--cream);
-        padding: 5px 12px;
-        border-radius: 12px;
+        padding: 4px 10px;
+        border-radius: 10px;
         border: 1px solid var(--card-border);
     }
 
@@ -391,7 +387,7 @@ https://applestarshop.ir/product-category/game-console/
 
     .nexus-belt-track {
         display: flex;
-        gap: 18px;
+        gap: 14px;
         width: max-content;
         will-change: transform;
     }
@@ -433,13 +429,13 @@ https://applestarshop.ir/product-category/game-console/
        ========================================================================= */
 
     .nexus-product-card {
-        width: 210px;
+        width: 190px;
         background: var(--cream);
-        border-radius: 16px;
-        padding: 14px;
+        border-radius: 14px;
+        padding: 10px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         text-decoration: none;
         color: var(--dark);
         border: 1px solid var(--cream-soft);
@@ -452,18 +448,18 @@ https://applestarshop.ir/product-category/game-console/
         transform: translateY(-4px);
         background: #FFFFFF;
         border-color: var(--beige);
-        box-shadow: 0 10px 20px rgba(43, 41, 39, 0.08);
+        box-shadow: 0 8px 16px rgba(43, 41, 39, 0.08);
     }
 
     .nexus-product-thumb {
         width: 100%;
-        height: 130px;
+        height: 115px;
         background: #FFFFFF;
-        border-radius: 12px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 10px;
+        padding: 8px;
         overflow: hidden;
     }
 
@@ -479,7 +475,7 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-product-title {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--dark);
         white-space: nowrap;
@@ -496,21 +492,21 @@ https://applestarshop.ir/product-category/game-console/
     }
 
     .nexus-product-price {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 900;
         color: var(--dark);
     }
 
     .nexus-add-btn {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
         background: var(--dark);
         color: var(--cream);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 11px;
         transition: background 0.2s;
     }
 
@@ -527,87 +523,87 @@ https://applestarshop.ir/product-category/game-console/
 
         .nexus-nav-grid {
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .nexus-category-card {
-            height: 120px;
-            padding: 12px;
-        }
-
-        .nexus-card-info h4 {
-            font-size: 14px;
-        }
-
-        .nexus-card-info span {
-            font-size: 11px;
-        }
-    }
-
-    @media (max-width: 768px) {
-
-        .nexus-slider-container {
-            border-radius: 16px;
-        }
-
-        .nexus-slider-arrow {
-            width: 34px;
-            height: 34px;
-            font-size: 12px;
-        }
-
-        .nexus-slider-arrow.prev {
-            right: 8px;
-        }
-
-        .nexus-slider-arrow.next {
-            left: 8px;
-        }
-
-        .nexus-slider-dots {
-            bottom: 10px;
-            padding: 4px 8px;
-        }
-
-        .nexus-dot {
-            width: 7px;
-            height: 7px;
-        }
-
-        .nexus-dot.active {
-            width: 18px;
-        }
-
-        .nexus-nav-grid {
-            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
         .nexus-category-card {
             height: 110px;
-            padding: 12px;
-            border-radius: 14px;
+            padding: 10px;
         }
 
         .nexus-card-info h4 {
             font-size: 13px;
         }
 
-        .nexus-product-card {
-            width: 165px;
+        .nexus-card-info span {
+            font-size: 10px;
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .nexus-slider-container {
+            border-radius: 12px;
+        }
+
+        .nexus-slider-arrow {
+            width: 30px;
+            height: 30px;
+            font-size: 11px;
+        }
+
+        .nexus-slider-arrow.prev {
+            right: 6px;
+        }
+
+        .nexus-slider-arrow.next {
+            left: 6px;
+        }
+
+        .nexus-slider-dots {
+            bottom: 8px;
+            padding: 3px 6px;
+        }
+
+        .nexus-dot {
+            width: 6px;
+            height: 6px;
+        }
+
+        .nexus-dot.active {
+            width: 16px;
+        }
+
+        .nexus-nav-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .nexus-category-card {
+            height: 100px;
             padding: 10px;
+            border-radius: 12px;
+        }
+
+        .nexus-card-info h4 {
+            font-size: 12px;
+        }
+
+        .nexus-product-card {
+            width: 150px;
+            padding: 8px;
         }
 
         .nexus-product-thumb {
-            height: 105px;
+            height: 95px;
         }
 
         .nexus-product-title {
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .nexus-product-price {
-            font-size: 12px;
+            font-size: 11px;
         }
     }
 </style>
@@ -772,120 +768,87 @@ const NEXUS_WOO_CONFIG = {
 
     /* ---------------------------------------------------------------------
        CATEGORIES
-       
-       تصاویر دقیقاً مطابق لینک‌هایی هستند که کاربر ارائه کرده است.
        --------------------------------------------------------------------- */
 
     categories: [
 
         {
-            id: 'cat-1',
-            wcCatId: 15,
-            wcSlug: 'iphone',
-            catUrl: '/product-category/iphone/',
-            title: 'آیفون‌ها',
-            subTitle: 'سری ۱۶ و ۱۵ پرو',
-
+            id: 'cat-iphone',
+            wcCatId: 2469,
+            catUrl: 'https://applestarshop.ir/product-category/mobail/iphone-mobail/',
+            title: 'آیفون',
+            subTitle: 'گوشی‌های اپل',
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Iphon.webp',
-
             icon: 'fa-brands fa-apple'
         },
 
-
         {
-            id: 'cat-2',
-            wcCatId: 20,
-            wcSlug: 'android',
-            catUrl: '/product-category/android/',
+            id: 'cat-android',
+            wcCatId: 2335,
+            catUrl: 'https://applestarshop.ir/product-category/mobail/android/',
             title: 'اندروید',
             subTitle: 'سامسونگ و شیائومی',
-
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Android-phone.webp',
-
             icon: 'fa-brands fa-android'
         },
 
-
         {
-            id: 'cat-3',
-            wcCatId: 25,
-            wcSlug: 'macbook',
-            catUrl: '/product-category/macbook/',
-            title: 'مک‌بوک',
-            subTitle: 'تراشه‌های M3 و M2',
-
+            id: 'cat-macbook',
+            wcCatId: 2463,
+            catUrl: 'https://applestarshop.ir/product-category/labtop/macbook/',
+            title: 'مک بوک',
+            subTitle: 'لپ‌تاپ‌های اپل',
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Mackbook.webp',
-
             icon: 'fa-solid fa-laptop'
         },
 
-
         {
-            id: 'cat-4',
-            wcCatId: 35,
-            wcSlug: 'ipad',
-            catUrl: '/product-category/ipad/',
-            title: 'آیپدها',
-            subTitle: 'پرو و ایر M2',
-
+            id: 'cat-ipad',
+            wcCatId: 2464,
+            catUrl: 'https://applestarshop.ir/product-category/tablet/ipad/',
+            title: 'آیپد',
+            subTitle: 'تبلت‌های اپل',
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Ipad1.webp',
-
             icon: 'fa-solid fa-tablet-screen-button'
         },
 
-
         {
-            id: 'cat-5',
-            wcCatId: 30,
-            wcSlug: 'windows-laptop',
-            catUrl: '/product-category/laptops/',
-            title: 'لپ‌تاپ ویندوز',
+            id: 'cat-windows',
+            wcCatId: 2470,
+            catUrl: 'https://applestarshop.ir/product-category/labtop/laptop-windows/',
+            title: 'لپ تاپ ویندوز',
             subTitle: 'طراحی و گیمینگ',
-
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Laptop_windows-.webp',
-
             icon: 'fa-brands fa-windows'
         },
 
-
         {
-            id: 'cat-6',
-            wcCatId: 40,
-            wcSlug: 'android-tablet',
-            catUrl: '/product-category/tablets/',
+            id: 'cat-tablet-android',
+            wcCatId: 2467,
+            catUrl: 'https://applestarshop.ir/product-category/tablet/tablet-androidi/',
             title: 'تبلت اندروید',
             subTitle: 'سری گلکسی تب',
-
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Tablet_android.webp',
-
             icon: 'fa-solid fa-tablet'
         },
 
-
         {
-            id: 'cat-7',
-            wcCatId: 45,
-            wcSlug: 'consoles',
-            catUrl: '/product-category/consoles/',
+            id: 'cat-console',
+            wcCatId: 2471,
+            catUrl: 'https://applestarshop.ir/product-category/game-console/',
             title: 'کنسول بازی',
             subTitle: 'PS5 و ایکس‌باکس',
-
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Game-console.webp',
-
             icon: 'fa-solid fa-gamepad'
         },
 
-
         {
-            id: 'cat-8',
-            wcCatId: 50,
-            wcSlug: 'gadgets',
-            catUrl: '/product-category/gadgets/',
-            title: 'گجت‌ها',
-            subTitle: 'اپل واچ و ایرپاد',
-
+            id: 'cat-gadget',
+            wcCatId: 2468,
+            catUrl: 'https://applestarshop.ir/product-category/gajet/',
+            title: 'گجت',
+            subTitle: 'لوازم جانبی',
             image: 'https://applestarshop.ir/wp-content/uploads/2026/08/Gajet1.webp',
-
             icon: 'fa-solid fa-headphones'
         }
 
@@ -1240,28 +1203,6 @@ function stopAutoSlide() {
 
 
 /* =========================================================================
-   SCROLL TO PRODUCT BELT
-   ========================================================================= */
-
-function scrollToBelt(id) {
-
-    const el =
-        document.getElementById(id);
-
-
-    if (el) {
-
-        el.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
-
-    }
-
-}
-
-
-/* =========================================================================
    PRODUCT HTML GENERATOR
    ========================================================================= */
 
@@ -1430,17 +1371,17 @@ function buildInitialUI() {
                ============================================================= */
 
             const card =
-                document.createElement('div');
+                document.createElement('a');
 
 
             card.className =
                 'nexus-category-card';
-
-
-            card.onclick =
-                () => scrollToBelt(
-                    `belt-${cat.id}`
-                );
+                
+            card.href =
+                cat.catUrl;
+                
+            card.target =
+                '_self';
 
 
             card.innerHTML = `
