@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لینک‌های مگامنو — Apple Star Shop</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #162038;
+      --line: rgba(255,255,255,.1);
+      --text: #eef3ff;
+      --muted: #9aa8c7;
+      --gold: #e8c872;
+      --gold-2: #f3de9b;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: Vazirmatn, Tahoma, system-ui, sans-serif; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(232,200,114,.12), transparent 50%),
+        radial-gradient(700px 360px at -10% 10%, rgba(108,182,255,.08), transparent 45%),
+        var(--bg);
+    }
+    .wrap { width: min(1280px, calc(100% - 28px)); margin: 24px auto 72px; }
+    header {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--line); border-radius: 20px; padding: 22px 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    .sub { margin: 0; color: var(--muted); line-height: 1.85; font-size: 14px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    button {
+      appearance: none; border: 0; cursor: pointer; font-family: inherit;
+      border-radius: 11px; padding: 10px 14px; font-weight: 800; font-size: 13px;
+    }
+    .gold { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #2a2108; }
+    .ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .ok {
+      display: none; margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+      background: rgba(61,214,140,.1); color: #d9ffe9; font-size: 13px;
+    }
+    .section { margin-top: 22px; }
+    .section h2 {
+      margin: 0 0 12px; font-size: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .main-link {
+      font-size: 12px; font-weight: 600; color: #9ec0ff; background: rgba(158,192,255,.08);
+      border: 1px solid rgba(158,192,255,.18); padding: 5px 10px; border-radius: 999px;
+      direction: ltr; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .cols.c3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1100px) { .cols, .cols.c3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 700px) { .cols, .cols.c3 { grid-template-columns: 1fr; } }
+    .col {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    }
+    .col h3 {
+      margin: 0; padding: 12px 12px 10px; font-size: 14px; background: rgba(232,200,114,.08);
+      border-bottom: 1px solid var(--line);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: right; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-size: 11px; font-weight: 600; }
+    td.title { font-size: 13px; font-weight: 700; width: 38%; }
+    td.link { font-size: 11px; direction: ltr; text-align: left; color: #b7c8ea; word-break: break-all; }
+    tr:last-child td { border-bottom: 0; }
+    .copy {
+      margin-top: 6px; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,.06); color: var(--gold-2); border: 1px solid var(--line);
+    }
+    .note {
+      margin-top: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.8;
+    }
+    .tag { font-size: 10px; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.06); color: #c9d4ee; font-weight: 700; }
+    nav a { color: var(--gold-2); text-decoration: none; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <nav><a href="./index.html">← برگشت به ابزار ساخت CSV</a></nav>
+      <h1>جدول لینک مگامنو</h1>
+      <p class="sub">
+        عنوان‌ها همان متن مگامنو هستند. لینک‌ها بر اساس ساختار واقعی سایت
+        (<span dir="ltr">applestarshop.ir</span>) و نامک‌های موجود وردپرس ساخته شده‌اند.
+        بعد از درون‌ریزی CSV، همین آدرس‌ها را در مگامنو بگذارید.
+      </p>
+      <div class="toolbar">
+        <button class="gold" id="copyAll" type="button">کپی همه عنوان‌ها و لینک‌ها</button>
+        <button class="ghost" id="dlCsv" type="button">دانلود جدول CSV</button>
+      </div>
+      <div class="ok" id="ok"></div>
+    </header>
+
+    <div id="app"></div>
+  </div>
+
+  <script>
+    const BASE = "https://applestarshop.ir/product-category";
+    const u = (...parts) => BASE + "/" + parts.filter(Boolean).join("/") + "/";
+
+    const DATA = [
+      {
+        title: "لپ‌تاپ",
+        href: u("labtop"),
+        note: "نامک سایت: labtop (نه laptop)",
+        colsClass: "",
+        cols: [
+          {
+            title: "لپ‌تاپ گیمینگ",
+            href: u("labtop", "laptop-windows", "gaming-laptop"),
+            items: [
+              ["ایسوس", u("labtop", "laptop-windows", "gaming-laptop", "asus-gaming-laptop")],
+              ["لنوو", u("labtop", "laptop-windows", "gaming-laptop", "lenovo-gaming-laptop")],
+              ["اچ‌پی", u("labtop", "laptop-windows", "gaming-laptop", "hp-gaming-laptop")],
+            ],
+          },
+          {
+            title: "لپ‌تاپ طراحی",
+            href: u("labtop", "laptop-windows", "laptop-design"),
+            items: [
+              ["ایسوس", u("labtop", "laptop-windows", "laptop-design", "asus-design-laptop")],
+              ["لنوو", u("labtop", "laptop-windows", "laptop-design", "lenovo-design-laptop")],
+              ["مک‌بوک / اپل", u("labtop", "macbook")],
+            ],
+          },
+          {
+            title: "لپ‌تاپ اداری",
+            href: u("labtop", "laptop-windows", "office-laptop"),
+            items: [
+              ["لنوو", u("labtop", "laptop-windows", "office-laptop", "lenovo-office-laptop")],
+              ["اچ‌پی", u("labtop", "laptop-windows", "office-laptop", "hp-office-laptop")],
+              ["ایسوس", u("labtop", "laptop-windows", "office-laptop", "asus-office-laptop")],
+            ],
+          },
+          {
+            title: "نوت‌بوک‌ها",
+            href: u("labtop", "laptop-windows", "notebooks"),
+            items: [],
+          },
+        ],
+      },
+      {
+        title: "موبایل",
+        href: u("mobail"),
+        note: "نامک سایت: mobail — ستون اپل روی iphone-mobail است، نه گوشیهای-اپل",
+        colsClass: "",
+        cols: [
+          {
+            title: "گوشی‌های اپل",
+            href: u("mobail", "iphone-mobail"),
+            items: [
+              ["آیفون ۱۶ و ۱۷", u("mobail", "iphone-mobail", "iphone-16-17")],
+              ["آیفون ۱۵ و ۱۴", u("mobail", "iphone-mobail", "iphone-15-14")],
+              ["سری SE و اقتصادی", u("mobail", "iphone-mobail", "iphone-se")],
+              ["آیفون اکتیو و نوت‌اکتیو", u("mobail", "iphone-mobail", "active-non-active-iphone")],
+            ],
+          },
+          {
+            title: "گوشی‌های سامسونگ",
+            href: u("mobail", "android", "سامسونگ"),
+            items: [
+              ["سری S (پرچمدار)", u("mobail", "android", "سامسونگ", "galaxy-s-series")],
+              ["سری A (میان‌رده)", u("mobail", "android", "سامسونگ", "galaxy-a-series")],
+              ["سری Z (تاشو)", u("mobail", "android", "سامسونگ", "galaxy-z-series")],
+              ["سری M و F", u("mobail", "android", "سامسونگ", "galaxy-m-f-series")],
+            ],
+          },
+          {
+            title: "گوشی‌های شیائومی",
+            href: u("mobail", "android", "xiaomi-mobile"),
+            items: [
+              ["سری شیائومی (پرچمدار)", u("mobail", "android", "xiaomi-mobile", "xiaomi-flagship-series")],
+              ["سری پوکو", u("mobail", "android", "xiaomi-mobile", "poco-series")],
+              ["سری ردمی", u("mobail", "android", "xiaomi-mobile", "redmi-series")],
+            ],
+          },
+          {
+            title: "لوازم جانبی موبایل",
+            href: u("mobail", "mobile-accessories"),
+            items: [
+              ["شارژر و آداپتور اصلی", u("mobail", "mobile-accessories", "chargers-cables")],
+              ["قاب و گلس", u("mobail", "mobile-accessories", "phone-cases-covers")],
+              ["هندزفری و ایرپاد", u("mobail", "mobile-accessories", "earphones-airpods")],
+              ["سایر برندها (ناتینگ، ریلمی)", u("mobail", "mobile-accessories", "other-mobile-brands")],
+            ],
+          },
+        ],
+      },
+      {
+        title: "تبلت",
+        href: u("tablet"),
+        note: "نامک سایت: tablet (نه tablets) — آی‌پد همان ipad است",
+        colsClass: "c3",
+        cols: [
+          {
+            title: "آی‌پد (Apple iPads)",
+            href: u("tablet", "ipad"),
+            items: [
+              ["آی‌پد پرو", u("tablet", "ipad", "ipad-pro")],
+              ["آی‌پد ایر", u("tablet", "ipad", "ipad-air")],
+              ["آی‌پد استاندارد", u("tablet", "ipad", "ipad-standard")],
+              ["آی‌پد مینی", u("tablet", "ipad", "ipad-mini")],
+            ],
+          },
+          {
+            title: "تبلت‌های اندرویدی",
+            href: u("tablet", "tablet-androidi"),
+            items: [
+              ["سامسونگ سری S", u("tablet", "tablet-androidi", "samsung-galaxy-tab-s")],
+              ["سامسونگ سری A", u("tablet", "tablet-androidi", "samsung-galaxy-tab-a")],
+              ["تبلت شیائومی", u("tablet", "tablet-androidi", "xiaomi-pad")],
+              ["تبلت لنوو", u("tablet", "tablet-androidi", "lenovo-tab")],
+            ],
+          },
+          {
+            title: "لوازم جانبی تبلت",
+            href: u("tablet", "tablet-accessories"),
+            items: [
+              ["قلم هوشمند", u("tablet", "tablet-accessories", "stylus-pen")],
+              ["کیبورد و کاور تبلت", u("tablet", "tablet-accessories", "tablet-keyboard-case")],
+              ["گلس و محافظ صفحه", u("tablet", "tablet-accessories", "tablet-screen-protector")],
+            ],
+          },
+        ],
+      },
+      {
+        title: "گجت و کنسول",
+        href: "",
+        note: "برای این سربرگ دستهٔ واحد نساختیم تا /gajet/ و /game-console/ نشکنند. در مگامنو سربرگ را سفارشی و بدون لینک (یا #) بگذارید.",
+        colsClass: "c3",
+        cols: [
+          {
+            title: "کنسول‌های بازی",
+            href: u("game-console"),
+            items: [
+              ["پلی‌استیشن", u("game-console", "playstation")],
+              ["ایکس‌باکس", u("game-console", "xbox")],
+              ["کنسول‌های پرتابل", u("game-console", "portable-consoles")],
+              ["کنسول‌های رترو", u("game-console", "retro-consoles")],
+            ],
+          },
+          {
+            title: "گجت‌های هوشمند و پوشیدنی",
+            href: u("gajet"),
+            items: [
+              ["ساعت هوشمند", u("gajet", "smartwatches")],
+              ["هندزفری و هدفون بی‌سیم", u("gajet", "wireless-earphones")],
+              ["اسپیکر شارژی و بلوتوثی", u("gajet", "bluetooth-speakers")],
+            ],
+          },
+          {
+            title: "تجهیزات گیمینگ و جانبی",
+            href: u("game-console", "gaming-accessories"),
+            items: [
+              ["دسته بازی", u("game-console", "gaming-accessories", "game-controllers")],
+              ["هدست گیمینگ", u("game-console", "gaming-accessories", "gaming-headsets")],
+              ["پایه شارژ و کیف کنسول", u("game-console", "gaming-accessories", "console-accessories")],
+              ["گیفت کارت", u("game-console", "gaming-accessories", "gift-cards")],
+            ],
+          },
+        ],
+      },
+    ];
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      }[c]));
+    }
+
+    function row(title, href, level) {
+      const link = href || "بدون لینک دسته — در مگامنو # یا خالی";
+      return `<tr>
+        <td class="title">${esc(title)} <span class="tag">${level}</span></td>
+        <td class="link">
+          ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener" style="color:#9ec0ff">${esc(href)}</a>` : esc(link)}
+          <div><button class="copy" type="button" data-copy="${esc(href || "#")}">کپی لینک</button></div>
+        </td>
+      </tr>`;
+    }
+
+    document.getElementById("app").innerHTML = DATA.map((sec) => {
+      const cols = sec.cols.map((col) => {
+        const items = col.items.map(([t, h]) => row(t, h, "آیتم")).join("");
+        return `<article class="col">
+          <h3>${esc(col.title)}</h3>
+          <table>
+            <thead><tr><th>عنوان مگامنو</th><th>لینک سایت</th></tr></thead>
+            <tbody>
+              ${row(col.title, col.href, "ستون")}
+              ${items}
+            </tbody>
+          </table>
+        </article>`;
+      }).join("");
+      return `<section class="section">
+        <h2>
+          ${esc(sec.title)}
+          ${sec.href ? `<span class="main-link">${esc(sec.href)} <button class="copy" type="button" data-copy="${esc(sec.href)}">کپی</button></span>` : `<span class="main-link">سربرگ سفارشی بدون لینک</span>`}
+        </h2>
+        <div class="cols ${sec.colsClass}">${cols}</div>
+        <p class="note">${esc(sec.note)}</p>
+      </section>`;
+    }).join("");
+
+    function allRows() {
+      const out = [["بخش", "سطح", "عنوان", "لینک"]];
+      DATA.forEach((sec) => {
+        out.push([sec.title, "سربرگ", sec.title, sec.href || "#"]);
+        sec.cols.forEach((col) => {
+          out.push([sec.title, "ستون", col.title, col.href]);
+          col.items.forEach(([t, h]) => out.push([sec.title, "آیتم", t, h]));
+        });
+      });
+      return out;
+    }
+
+    function toast(msg) {
+      const el = document.getElementById("ok");
+      el.style.display = "block";
+      el.textContent = msg;
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("کپی شد.");
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        toast("کپی شد.");
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-copy]");
+      if (btn) copyText(btn.getAttribute("data-copy"));
+    });
+
+    document.getElementById("copyAll").addEventListener("click", () => {
+      const text = allRows().map((r) => r.join("\t")).join("\n");
+      copyText(text);
+    });
+
+    document.getElementById("dlCsv").addEventListener("click", () => {
+      const rows = allRows().map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\uFEFF" + rows + "\n"], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "mega-menu-links.csv";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast("جدول CSV دانلود شد.");
+    });
+  </script>
+</body>
+</html>
