@@ -1,5 +1,56 @@
-vless://888ace32-07d3-4000-b6c2-1268d9715f1b@neo.harmira.ir:2364?security=&encryption=mlkem768x25519plus.native.0rtt.9VdibyTxC6joaDgaQ1rnSEYfBQOlgDJGnlDA6sVJ8kU&headerType=none&type=tcp#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%204%20%7C%20Sha-09%7C%20MTSRVRS
-vless://a34b5e88-cf0d-4c01-8199-2d1002d3c787@176.108.245.3:443?security=reality&encryption=none&pbk=HKpd1sbrhBds8SJSL0d22MAq_QyTR6EP6y5b5DYol3U&headerType=none&fp=firefox&type=tcp&flow=xtls-rprx-vision&sni=www.wikihow.com#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2016%20%7C%20Sha-09%7C%20MTSRVRS
-vless://76186f1e-3062-4a2b-98c2-fab3c61a9511@91.224.86.107:9830?security=reality&encryption=none&pbk=bnRIb3Er1i-K6NGGByCO9UbGfOvu43ZoiK7ulPd1SzU&fp=qq&type=grpc&serviceName=grpc-tunnel&sni=dl.google.com&sid=aabbccdd#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2075%20%7C%20Sha-09%7C%20MTSRVRS
-vless://e0aafde7-37e2-486b-eb30-efa71166bf7e@165.154.55.105:20984?security=reality&encryption=none&pbk=Ns3J1Dc0WBSu560uhGwDfn1kic7IZm3ZHggSpExhyRo&headerType=none&fp=chrome&type=tcp&sni=dl.google.com#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2034%20%7C%20Sha-09%7C%20MTSRVRS
-vless://626c0789-16d1-4815-be8b-bd03959d7d12@159.195.240.82:443?security=reality&encryption=none&pbk=tzOeyllk2VtPXZ_BJ2lOZcGtsnn41ZHBa9dE6s9sFiQ&headerType=none&fp=firefox&type=tcp&flow=xtls-rprx-vision&sni=vie1.tsumshop.org&sid=c8c75aaf699259b4#%F0%9F%8C%90%D8%B3%D8%B1%D9%88%D8%B1%2038%20%7C%20Sha-09%7C%20MTSRVRS
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const action = url.searchParams.get('api_action');
+
+    // CORS Headers برای پاسخ به درخواست‌های برنامه شما
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    };
+
+    if (action === 'validate') {
+      const key = url.searchParams.get('key');
+      const hwid = url.searchParams.get('hwid');
+
+      if (!key || !hwid) {
+        return new Response(JSON.stringify({ status: 'ERROR', message: 'پارامترهای ورودی ناقص است' }), { headers: corsHeaders });
+      }
+
+      // خواندن اطلاعات لایسنس از Cloudflare KV
+      const licenseDataStr = await env.LICENSES_KV.get(key);
+      if (!licenseDataStr) {
+        return new Response(JSON.stringify({ status: 'INVALID', message: 'لایسنس یافت نشد' }), { headers: corsHeaders });
+      }
+
+      const license = JSON.parse(licenseDataStr);
+
+      // بررسی تاریخ انقضا
+      if (license.expire_date && new Date(license.expire_date) < new Date()) {
+        return new Response(JSON.stringify({ status: 'EXPIRED', message: 'اعتبار لایسنس به پایان رسیده است' }), { headers: corsHeaders });
+      }
+
+      // مدیریت دستگاه‌ها در KV
+      let devices = license.devices || [];
+      if (devices.includes(hwid)) {
+        // دستگاه قبلاً ثبت شده است
+        return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, expires: license.expire_date }), { headers: corsHeaders });
+      }
+
+      // چک کردن سقف تعداد دستگاه‌ها
+      if (devices.length >= license.max_devices) {
+        return new Response(JSON.stringify({ status: 'MAX_DEVICES_REACHED', message: 'سقف تعداد دستگاه مجاز تکمیل شده است' }), { headers: corsHeaders });
+      }
+
+      // ثبت دستگاه جدید
+      devices.push(hwid);
+      license.devices = devices;
+      await env.LICENSES_KV.put(key, JSON.stringify(license));
+
+      return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, expires: license.expire_date }), { headers: corsHeaders });
+    }
+
+    return new Response(JSON.stringify({ status: 'ERROR', message: 'Invalid Action' }), { headers: corsHeaders });
+  }
+};
