@@ -1,24 +1,325 @@
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const action = url.searchParams.get('api_action');
 
-ERROR: خطا در اجرای python.exe (کد خروج 1).
---- آخرین خروجی ---
-  File "C:\Users\HP\SupermarketSystem-build\venv\Lib\site-packages\PyInstaller\building\build_main.py", line 1213, in build
-    exec(code, spec_namespace)
-  File "app.spec", line 70, in <module>
-    exe = EXE(
-          ^^^^
-  File "C:\Users\HP\SupermarketSystem-build\venv\Lib\site-packages\PyInstaller\building\api.py", line 654, in __init__
-    self.toc = normalize_toc(self.toc)
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\HP\SupermarketSystem-build\venv\Lib\site-packages\PyInstaller\building\datastruct.py", line 327, in normalize_toc
-    return _normalize_toc(toc, _TOC_TYPE_PRIORITIES, _type_case_normalization_fcn)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\HP\SupermarketSystem-build\venv\Lib\site-packages\PyInstaller\building\datastruct.py", line 345, in _normalize_toc
-    for dest_name, src_name, typecode in toc:
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ValueError: not enough values to unpack (expected 3, got 2)
-FAIL - see C:\Users\HP\Downloads\Super-system--1.4.1\Super-system--1.4.1\installer\windows\build.log and installer\windows\README.md
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    };
 
- Build FAILED with exit code 1.
- Read installer\windows\build.log and README.md (troubleshooting).
+    // ۱. اعتبارسنجی لایسنس برای نرم‌افزار شما
+    if (action === 'validate') {
+      const key = url.searchParams.get('key');
+      const hwid = url.searchParams.get('hwid');
 
-Press any key to continue . . .
+      if (!key || !hwid) {
+        return new Response(JSON.stringify({ status: 'ERROR', message: 'پارامترهای ورودی ناقص است' }), { headers: corsHeaders });
+      }
+
+      const licenseDataStr = await env.LICENSES_KV.get(key);
+      if (!licenseDataStr) {
+        return new Response(JSON.stringify({ status: 'INVALID', message: 'لایسنس یافت نشد' }), { headers: corsHeaders });
+      }
+
+      const license = JSON.parse(licenseDataStr);
+
+      if (license.expire_date && new Date(license.expire_date) < new Date()) {
+        return new Response(JSON.stringify({ status: 'EXPIRED', message: 'اعتبار لایسنس به پایان رسیده است' }), { headers: corsHeaders });
+      }
+
+      let devices = license.devices || [];
+      if (devices.includes(hwid)) {
+        return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, owner: license.owner_name, expires: license.expire_date }), { headers: corsHeaders });
+      }
+
+      if (devices.length >= license.max_devices) {
+        return new Response(JSON.stringify({ status: 'MAX_DEVICES_REACHED', message: 'سقف تعداد دستگاه مجاز تکمیل شده است' }), { headers: corsHeaders });
+      }
+
+      devices.push(hwid);
+      license.devices = devices;
+      await env.LICENSES_KV.put(key, JSON.stringify(license));
+
+      return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, owner: license.owner_name, expires: license.expire_date }), { headers: corsHeaders });
+    }
+
+    // بررسی کوکی لاگین
+    const cookie = request.headers.get('Cookie') || '';
+    const isLoggedIn = cookie.includes('logged_in=true');
+
+    // خروج از سیستم
+    if (url.searchParams.get('logout') === 'true') {
+      return new Response('', {
+        status: 302,
+        headers: {
+          'Location': url.pathname,
+          'Set-Cookie': 'logged_in=false; Path=/; Max-Age=0'
+        }
+      });
+    }
+
+    // بررسی ارسال فرم (POST)
+    if (request.method === 'POST') {
+      let formData;
+      try {
+        formData = await request.formData();
+      } catch (e) {
+        formData = new URLSearchParams(await request.text());
+      }
+      
+      const formAction = formData.get('action');
+
+      if (formAction === 'login') {
+        const user = formData.get('username');
+        const pass = formData.get('password');
+        if (user === 'خواجوی' && pass === 'M8056@8056m') {
+          return new Response('', {
+            status: 302,
+            headers: {
+              'Location': url.pathname,
+              'Set-Cookie': 'logged_in=true; Path=/; HttpOnly; Secure; SameSite=Lax'
+            }
+          });
+        } else {
+          return new Response(getLoginPage("نام کاربری یا رمز عبور اشتباه است"), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+        }
+      }
+
+      if (isLoggedIn) {
+        if (formAction === 'add_app') {
+          const appName = formData.get('app_name')?.trim();
+          if (appName) {
+            let appsStr = await env.LICENSES_KV.get('__APPS__') || '[]';
+            let apps = JSON.parse(appsStr);
+            if (!apps.some(a => a.name === appName)) {
+              apps.push({ id: Date.now().toString(), name: appName });
+              await env.LICENSES_KV.put('__APPS__', JSON.stringify(apps));
+            }
+          }
+        } else if (formAction === 'add_license') {
+          const appId = formData.get('app_id');
+          const ownerName = formData.get('owner_name')?.trim() || 'نامشخص';
+          const type = formData.get('license_type');
+          const maxDevices = parseInt(formData.get('max_devices') || '1');
+          const expireDate = formData.get('expire_date') || null;
+
+          const genKey = 'KEY-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+          
+          const licenseData = {
+            app_id: appId,
+            owner_name: ownerName,
+            type: type,
+            max_devices: maxDevices,
+            expire_date: expireDate,
+            devices: [],
+            created_at: new Date().toISOString().split('T')[0]
+          };
+
+          await env.LICENSES_KV.put(genKey, JSON.stringify(licenseData));
+          
+          let keysListStr = await env.LICENSES_KV.get(`__KEYS_${appId}__`) || '[]';
+          let keysList = JSON.parse(keysListStr);
+          keysList.unshift({ key: genKey, ...licenseData });
+          await env.LICENSES_KV.put(`__KEYS_${appId}__`, JSON.stringify(keysList));
+        }
+
+        // ریدایرکت امن بعد از ثبت موفق
+        return new Response('', {
+          status: 302,
+          headers: { 'Location': url.pathname }
+        });
+      }
+    }
+
+    if (!isLoggedIn) {
+      return new Response(getLoginPage(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
+    // بارگذاری اطلاعات داشبورد
+    let appsStr = await env.LICENSES_KV.get('__APPS__') || '[]';
+    let apps = JSON.parse(appsStr);
+    let selectedAppId = url.searchParams.get('app_id') || (apps[0] ? apps[0].id : null);
+    
+    let licenses = [];
+    if (selectedAppId) {
+      let keysListStr = await env.LICENSES_KV.get(`__KEYS_${selectedAppId}__`) || '[]';
+      licenses = JSON.parse(keysListStr);
+    }
+
+    const baseUrl = `${url.protocol}//${url.host}${url.pathname}`;
+
+    return new Response(getDashboardHTML(apps, selectedAppId, licenses, baseUrl), {
+      headers: { "Content-Type": "text/html; charset=utf-8" }
+    });
+  }
+};
+
+function getLoginPage(error = '') {
+  return `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود به پنل لایسنس</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #1e1e2e; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #2b2b3d; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 320px; text-align: center; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; font-family: Tahoma, sans-serif; }
+        input { background: #44445a; color: #fff; outline: none; }
+        button { background: #a6e3a1; color: #11111b; font-weight: bold; cursor: pointer; }
+        .error { color: #f38ba8; font-size: 13px; background: rgba(243, 139, 168, 0.1); padding: 8px; border-radius: 4px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>ورود مدیریت لایسنس</h3>
+        ${error ? `<div class='error'>${error}</div>` : ''}
+        <form method="POST">
+            <input type="hidden" name="action" value="login">
+            <input type="text" name="username" placeholder="نام کاربری" required autocomplete="off">
+            <input type="password" name="password" placeholder="رمز عبور" required autocomplete="off">
+            <button type="submit">ورود به سیستم</button>
+        </form>
+    </div>
+</body>
+</html>`;
+}
+
+function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
+  let appOptions = apps.map(a => `<option value="${a.id}" ${a.id === selectedAppId ? 'selected' : ''}>${a.name}</option>`).join('');
+  let appTabs = apps.map(a => `<a href="?app_id=${a.id}" class="app-tab ${a.id === selectedAppId ? 'active' : ''}">${a.name}</a>`).join('');
+  
+  let licenseRows = licenses.map((lic, index) => `
+    <tr>
+        <td style="color: #6c7086;">${index + 1}</td>
+        <td style="font-weight: bold; color: #89b4fa;">${lic.owner_name || 'نامشخص'}</td>
+        <td style="font-family: monospace; font-weight: bold; color: #f9e2af; font-size: 14px;">${lic.key}</td>
+        <td><span class="badge ${lic.type === 'DEMO' ? 'badge-demo' : 'badge-full'}">${lic.type}</span></td>
+        <td>${lic.max_devices} دستگاه</td>
+        <td style="color: ${!lic.expire_date ? '#a6e3a1' : '#cdd6f4'}">${lic.expire_date || 'دائمی (بدون انقضا)'}</td>
+        <td>
+            <div class="api-link-box" dir="ltr">
+                ${baseUrl}?api_action=validate&key=${lic.key}&hwid=[HWID]
+            </div>
+        </td>
+    </tr>
+  `).join('');
+
+  return `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت لایسنس ابری (کلودفلر)</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #181825; color: #cdd6f4; margin: 0; padding: 20px; font-size: 14px; line-height: 1.6; }
+        .container { max-width: 1200px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #313244; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h2 { margin: 0; color: #a6e3a1; }
+        .card { background: #1e1e2e; padding: 25px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #313244; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card h3 { margin-top: 0; color: #89b4fa; border-bottom: 1px dashed #45475a; padding-bottom: 10px; }
+        .form-group { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-bottom: 15px; }
+        input, select, button { padding: 10px 15px; border-radius: 5px; border: 1px solid #45475a; background: #313244; color: #fff; font-family: Tahoma, sans-serif; outline: none; }
+        input:focus, select:focus { border-color: #89b4fa; }
+        button.primary { background: #a6e3a1; color: #11111b; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
+        button.primary:hover { background: #94cc8f; }
+        a.btn-logout { background: #f38ba8; color: #11111b; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #11111b; border-radius: 8px; overflow: hidden; }
+        th, td { border-bottom: 1px solid #313244; padding: 12px; text-align: center; vertical-align: middle; }
+        th { background: #313244; color: #cdd6f4; font-weight: normal; }
+        tr:hover { background: #1e1e2e; }
+        .api-link-box { background: #181825; padding: 6px 10px; font-family: monospace; color: #f9e2af; border-radius: 4px; font-size: 11px; word-break: break-all; text-align: left; border: 1px solid #313244; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .badge-demo { background: rgba(250, 179, 135, 0.2); color: #fab387; border: 1px solid #fab387; }
+        .badge-full { background: rgba(166, 227, 161, 0.2); color: #a6e3a1; border: 1px solid #a6e3a1; }
+        .app-tabs { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .app-tab { padding: 8px 15px; background: #313244; color: #fff; text-decoration: none; border-radius: 5px; font-size: 13px; }
+        .app-tab.active { background: #89b4fa; color: #11111b; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>مدیریت ابری لایسنس (کلودفلر ورکر)</h2>
+        <div>
+            <span style="margin-left: 15px; font-size: 13px; color: #a6adc8;">خوش آمدید، خواجوی</span>
+            <a href="?logout=true" class="btn-logout">خروج</a>
+        </div>
+    </div>
+
+    <!-- ثبت نرم‌افزار -->
+    <div class="card">
+        <h3>۱. ثبت نرم‌افزار جدید</h3>
+        <form method="POST" class="form-group">
+            <input type="hidden" name="action" value="add_app">
+            <input type="text" name="app_name" placeholder="عنوان نرم‌افزار (مثلاً: سوپرمارکت نسخه ۲)" required style="flex-grow: 1;">
+            <button type="submit" class="primary">ثبت نرم‌افزار</button>
+        </form>
+    </div>
+
+    ${apps.length > 0 ? `
+    <!-- صدور لایسنس -->
+    <div class="card">
+        <h3>۲. صدور لایسنس جدید</h3>
+        <form method="POST" class="form-group">
+            <input type="hidden" name="action" value="add_license">
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">نرم‌افزار هدف</label>
+                <select name="app_id">
+                    ${appOptions}
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">نام صاحب لایسنس (مشتری)</label>
+                <input type="text" name="owner_name" placeholder="مثلاً: سوپرمارکت کوروش" required>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">نوع دسترسی</label>
+                <select name="license_type">
+                    <option value="FULL">اصلی (Full)</option>
+                    <option value="DEMO">دمو (Demo)</option>
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">تعداد سیستم مجاز</label>
+                <input type="number" name="max_devices" value="1" min="1" style="width: 70px;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">تاریخ انقضا (خالی=دائمی)</label>
+                <input type="date" name="expire_date">
+            </div>
+            <div style="margin-top: 22px;">
+                <button type="submit" class="primary">+ تولید کلید لایسنس</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- فهرست لایسنس‌ها -->
+    <div class="card">
+        <h3>فهرست لایسنس‌های صادر شده و لینک‌های اتصال</h3>
+        <div class="app-tabs">
+            ${appTabs}
+        </div>
+        ${licenses.length === 0 ? '<p style="text-align: center; color: #a6adc8; margin-top: 20px;">هیچ لایسنسی برای این نرم‌افزار صادر نشده است.</p>' : `
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>نام صاحب لایسنس</th>
+                    <th>کلید لایسنس</th>
+                    <th>نوع</th>
+                    <th>سقف دستگاه</th>
+                    <th>تاریخ انقضا</th>
+                    <th>لینک API اختصاصی برای ارتباط نرم‌افزار</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${licenseRows}
+            </tbody>
+        </table>
+        `}
+    </div>
+    ` : ''}
+</div>
+</body>
+</html>`;
+}
