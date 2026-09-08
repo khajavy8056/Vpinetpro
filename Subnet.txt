@@ -3,13 +3,12 @@ export default {
     const url = new URL(request.url);
     const action = url.searchParams.get('api_action');
 
-    // CORS Headers برای پاسخ به درخواست‌های برنامه شما
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json"
     };
 
-    // ۱. هندل کردن API اعتبارسنجی (استفاده توسط نرم‌افزار شما)
+    // ۱. اعتبارسنجی لایسنس برای نرم‌افزار شما
     if (action === 'validate') {
       const key = url.searchParams.get('key');
       const hwid = url.searchParams.get('hwid');
@@ -31,7 +30,7 @@ export default {
 
       let devices = license.devices || [];
       if (devices.includes(hwid)) {
-        return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, expires: license.expire_date }), { headers: corsHeaders });
+        return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, owner: license.owner_name, expires: license.expire_date }), { headers: corsHeaders });
       }
 
       if (devices.length >= license.max_devices) {
@@ -42,14 +41,13 @@ export default {
       license.devices = devices;
       await env.LICENSES_KV.put(key, JSON.stringify(license));
 
-      return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, expires: license.expire_date }), { headers: corsHeaders });
+      return new Response(JSON.stringify({ status: 'SUCCESS', type: license.type, owner: license.owner_name, expires: license.expire_date }), { headers: corsHeaders });
     }
 
-    // بررسی کوکی یا وضعیت لاگین برای پنل مدیریت
+    // بررسی لاگین
     const cookie = request.headers.get('Cookie') || '';
     const isLoggedIn = cookie.includes('logged_in=true');
 
-    // هندل کردن درخواست‌های POST پنل مدیریت
     if (request.method === 'POST') {
       const formData = await request.formData();
       const formAction = formData.get('action');
@@ -83,6 +81,7 @@ export default {
           }
         } else if (formAction === 'add_license') {
           const appId = formData.get('app_id');
+          const ownerName = formData.get('owner_name')?.trim() || 'نامشخص';
           const type = formData.get('license_type');
           const maxDevices = parseInt(formData.get('max_devices') || '1');
           const expireDate = formData.get('expire_date') || null;
@@ -91,11 +90,12 @@ export default {
           
           const licenseData = {
             app_id: appId,
+            owner_name: ownerName,
             type: type,
             max_devices: maxDevices,
             expire_date: expireDate,
             devices: [],
-            created_at: newicoDate = new Date().toISOString().split('T')[0]
+            created_at: new Date().toISOString().split('T')[0]
           };
 
           await env.LICENSES_KV.put(genKey, JSON.stringify(licenseData));
@@ -123,12 +123,10 @@ export default {
       });
     }
 
-    // اگر کاربر لاگین نکرده است، صفحه لاگین را نشان بده
     if (!isLoggedIn) {
       return new Response(getLoginPage(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
-    // بارگذاری اطلاعات برای پنل مدیریت
     let appsStr = await env.LICENSES_KV.get('__APPS__') || '[]';
     let apps = JSON.parse(appsStr);
     let selectedAppId = url.searchParams.get('app_id') || (apps[0] ? apps[0].id : null);
@@ -184,11 +182,16 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
   let licenseRows = licenses.map((lic, index) => `
     <tr>
         <td style="color: #6c7086;">${index + 1}</td>
-        <td style="font-family: monospace; font-weight: bold; color: #f9e2af; font-size: 15px;">${lic.key}</td>
+        <td style="font-weight: bold; color: #89b4fa;">${lic.owner_name || 'نامشخص'}</td>
+        <td style="font-family: monospace; font-weight: bold; color: #f9e2af; font-size: 14px;">${lic.key}</td>
         <td><span class="badge ${lic.type === 'DEMO' ? 'badge-demo' : 'badge-full'}">${lic.type}</span></td>
         <td>${lic.max_devices} دستگاه</td>
         <td style="color: ${!lic.expire_date ? '#a6e3a1' : '#cdd6f4'}">${lic.expire_date || 'دائمی (بدون انقضا)'}</td>
-        <td dir="ltr">${lic.created_at || '-'}</td>
+        <td>
+            <div class="api-link-box" dir="ltr">
+                ${baseUrl}?api_action=validate&key=${lic.key}&hwid=[HWID]
+            </div>
+        </td>
     </tr>
   `).join('');
 
@@ -199,7 +202,7 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
     <title>مدیریت لایسنس ابری (کلودفلر)</title>
     <style>
         body { font-family: Tahoma, sans-serif; background: #181825; color: #cdd6f4; margin: 0; padding: 20px; font-size: 14px; line-height: 1.6; }
-        .container { max-width: 1100px; margin: auto; }
+        .container { max-width: 1200px; margin: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #313244; padding-bottom: 15px; margin-bottom: 20px; }
         .header h2 { margin: 0; color: #a6e3a1; }
         .card { background: #1e1e2e; padding: 25px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #313244; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -211,10 +214,10 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
         button.primary:hover { background: #94cc8f; }
         a.btn-logout { background: #f38ba8; color: #11111b; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 13px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #11111b; border-radius: 8px; overflow: hidden; }
-        th, td { border-bottom: 1px solid #313244; padding: 12px; text-align: center; }
+        th, td { border-bottom: 1px solid #313244; padding: 12px; text-align: center; vertical-align: middle; }
         th { background: #313244; color: #cdd6f4; font-weight: normal; }
         tr:hover { background: #1e1e2e; }
-        .api-box { background: #11111b; padding: 15px; font-family: monospace; color: #f9e2af; border-radius: 5px; border: 1px solid #45475a; word-break: break-all; font-size: 13px; direction: ltr; text-align: left; }
+        .api-link-box { background: #181825; padding: 6px 10px; font-family: monospace; color: #f9e2af; border-radius: 4px; font-size: 11px; word-break: break-all; text-align: left; border: 1px solid #313244; }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .badge-demo { background: rgba(250, 179, 135, 0.2); color: #fab387; border: 1px solid #fab387; }
         .badge-full { background: rgba(166, 227, 161, 0.2); color: #a6e3a1; border: 1px solid #a6e3a1; }
@@ -226,7 +229,7 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
 <body>
 <div class="container">
     <div class="header">
-        <h2>مدیریت ابری لایسنس (Cloudflare Worker)</h2>
+        <h2>مدیریت ابری لایسنس (کلودفلر ورکر)</h2>
         <div>
             <span style="margin-left: 15px; font-size: 13px; color: #a6adc8;">خوش آمدید، خواجوی</span>
             <a href="?logout=true" class="btn-logout">خروج</a>
@@ -256,6 +259,10 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
                 </select>
             </div>
             <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">نام صاحب لایسنس (مشتری)</label>
+                <input type="text" name="owner_name" placeholder="مثلاً: سوپرمارکت کوروش" required>
+            </div>
+            <div>
                 <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">نوع دسترسی</label>
                 <select name="license_type">
                     <option value="FULL">اصلی (Full)</option>
@@ -264,7 +271,7 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
             </div>
             <div>
                 <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">تعداد سیستم مجاز</label>
-                <input type="number" name="max_devices" value="1" min="1" style="width: 80px;">
+                <input type="number" name="max_devices" value="1" min="1" style="width: 70px;">
             </div>
             <div>
                 <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #a6adc8;">تاریخ انقضا (خالی=دائمی)</label>
@@ -278,7 +285,7 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
 
     <!-- فهرست لایسنس‌ها -->
     <div class="card">
-        <h3>فهرست لایسنس‌های صادر شده</h3>
+        <h3>فهرست لایسنس‌های صادر شده و لینک‌های اتصال</h3>
         <div class="app-tabs">
             ${appTabs}
         </div>
@@ -287,11 +294,12 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>نام صاحب لایسنس</th>
                     <th>کلید لایسنس</th>
                     <th>نوع</th>
                     <th>سقف دستگاه</th>
                     <th>تاریخ انقضا</th>
-                    <th>تاریخ صدور</th>
+                    <th>لینک API اختصاصی برای ارتباط نرم‌افزار</th>
                 </tr>
             </thead>
             <tbody>
@@ -299,15 +307,6 @@ function getDashboardHTML(apps, selectedAppId, licenses, baseUrl) {
             </tbody>
         </table>
         `}
-    </div>
-
-    <!-- راهنمای API -->
-    <div class="card">
-        <h3>۳. راهنمای اتصال نرم‌افزار به API ابری</h3>
-        <p style="color: #bac2de; font-size: 13px;">برای اعتبارسنجی در برنامه خود، درخواست <code>GET</code> زیر را بفرستید:</p>
-        <div class="api-box">
-            ${baseUrl}?api_action=validate&key=<b>[LICENSE_KEY]</b>&hwid=<b>[CLIENT_HWID]</b>
-        </div>
     </div>
     ` : ''}
 </div>
